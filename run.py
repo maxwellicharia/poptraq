@@ -1,5 +1,14 @@
-from controller import app
+from app import app, db, migrate
 
 
-if __name__=='__main__':
-    app.run(debug=True)
+def create_app():
+    db.app = app
+    db.init_app(app)
+    migrate.init_app(app, db)
+    return app
+
+
+application = create_app()
+
+if __name__ == '__main__':
+    application.run(debug=True)
