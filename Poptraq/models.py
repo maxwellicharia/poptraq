@@ -3,7 +3,11 @@ from Poptraq import db
 
 class User(db.Model):
     """ Create user table"""
-    national_id = db.Column(db.Integer, primary_key=True)
+
+    __tablename__ = 'user'
+
+    id = db.Column(db.Integer, primary_key=True)
+    national_id = db.Column(db.Integer)
     first_name = db.Column(db.String(80))
     surname = db.Column(db.String(80))
     dob = db.Column(db.String(25))
@@ -19,3 +23,6 @@ class User(db.Model):
         self.home_county = home_county
         self.email = email
         self.password = password
+
+    def __repr__(self):
+        return '<id {}>'.format(self.id)
