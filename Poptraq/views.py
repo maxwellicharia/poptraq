@@ -1,4 +1,6 @@
-from flask import render_template, request, url_for
+import os
+
+from flask import render_template, request, url_for, send_from_directory
 from Poptraq.form import Signup
 from Poptraq.models import User
 from Poptraq import app, db, migrate
@@ -42,6 +44,11 @@ def signup():
 @app.route('/account/')
 def account():
     return render_template("account.html")
+
+
+@app.route('/favicon.ico')
+def fav():
+    return send_from_directory(os.path.join(app.root_path, 'static'), 'favicon.ico')
 
 
 def create_app():
