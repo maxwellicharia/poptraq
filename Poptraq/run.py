@@ -1,7 +1,7 @@
-import Poptraq.views
+from Poptraq import views
 
 
-app = Poptraq.views.create_app()
+app = views.create_app()
 
 if __name__ == '__main__':
     app.run()
