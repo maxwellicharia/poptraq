@@ -1,4 +1,4 @@
-from app import db
+from Poptraq import db
 
 
 class User(db.Model):

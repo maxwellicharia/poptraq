@@ -1,19 +1,7 @@
-from flask import Flask, render_template, request, url_for
-from flask_bootstrap import Bootstrap
-from flask_sqlalchemy import SQLAlchemy
-from flask_migrate import Migrate, Manager, MigrateCommand
-from form import Signup
-from models import User
-
-app = Flask(__name__)
-app.config['SECRET_KEY'] = "$poptraq#"
-app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://localhost/poptraq"
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-db = SQLAlchemy(app)
-manager = Manager(app)
-manager.add_command('db', MigrateCommand)
-migrate = Migrate(app, db)
-Bootstrap(app)
+from flask import render_template, request, url_for
+from Poptraq.form import Signup
+from Poptraq.models import User
+from Poptraq import app, db, migrate
 
 
 @app.route('/')
@@ -54,3 +42,10 @@ def signup():
 @app.route('/account/')
 def account():
     return render_template("account.html")
+
+
+def create_app():
+    db.app = app
+    db.init_app(app)
+    migrate.init_app(app, db)
+    return app
