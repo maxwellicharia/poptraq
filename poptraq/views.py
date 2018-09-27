@@ -1,9 +1,9 @@
 import os
 
 from flask import render_template, request, url_for, send_from_directory
-from Poptraq.form import Signup
-from Poptraq.models import User
-from Poptraq import app, db, migrate
+from poptraq.form import Signup
+from poptraq.models import User
+from poptraq import app, db, migrate
 
 
 @app.route('/')

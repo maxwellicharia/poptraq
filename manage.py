@@ -1,4 +1,4 @@
-from Poptraq import manager
+from poptraq import manager
 
 
 if __name__ == '__main__':
