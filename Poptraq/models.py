@@ -1,8 +1,4 @@
-from flask_migrate import MigrateCommand
-from app import manager, db
-
-
-manager.add_command('db', MigrateCommand)
+from app import db
 
 
 class User(db.Model):
@@ -23,7 +19,3 @@ class User(db.Model):
         self.home_county = home_county
         self.email = email
         self.password = password
-
-
-if __name__ == '__main__':
-    manager.run()

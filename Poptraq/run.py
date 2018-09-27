@@ -1,4 +1,5 @@
-from app import app, db, migrate
+import app
+from app import db, migrate
 
 
 def create_app():

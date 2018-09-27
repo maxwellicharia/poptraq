@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, url_for
 from flask_bootstrap import Bootstrap
 from flask_sqlalchemy import SQLAlchemy
-from flask_migrate import Migrate, Manager
+from flask_migrate import Migrate, Manager, MigrateCommand
 from form import Signup
 from models import User
 
@@ -10,8 +10,9 @@ app.config['SECRET_KEY'] = "$poptraq#"
 app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://localhost/poptraq"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
-migrate = Migrate(app, db)
 manager = Manager(app)
+manager.add_command('db', MigrateCommand)
+migrate = Migrate(app, db)
 Bootstrap(app)
 
 
@@ -40,15 +41,13 @@ def signup():
         if not form.validate_on_submit():  # making sure that the form is validated before submission
             return render_template('signup.html', form=form, not_validate=True)
         else:
-            user = User()
-            user.__init__(national_id=request.form['national_id'],
+            User.__init__(national_id=request.form['national_id'],
                           first_name=request.form['first_name'],
                           surname=request.form['surname'],
                           dob=request.form['dob'],
                           home_county=request.form['home_county'],
                           email=request.form['email'],
                           password=request.form['password'])
-            user.create()
             return url_for('account')
 
 
