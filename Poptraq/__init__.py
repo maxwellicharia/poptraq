@@ -13,6 +13,8 @@ Bootstrap(app)
 
 db = SQLAlchemy(app)
 
+from Poptraq.models import User
+
 manager = Manager(app)
 manager.add_command('db', MigrateCommand)
 
