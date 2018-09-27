@@ -1,10 +1,33 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Dashboard</title>
-</head>
-<body>
-To add
-</body>
-</html>
+{% extends "bootstrap/base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}
+
+Poptraq
+
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+    <center>
+
+        <h1>Poptraq - Population Analyser</h1>
+
+        <br/>
+
+        <h2>Current Population || Budget</h2>
+
+        <br/>
+        <br/>
+
+        <a class="btn btn-success" href="{{ url_for('login')}}" role="button">Login</a>
+
+        <a class="btn btn-primary" href="{{ url_for('signup')}}" role="button">Signup</a>
+
+        <a class="btn btn-danger" href="{{ url_for('logout')}}" role="button">Logout</a>
+
+    </center>
+</div>
+
+{% endblock %}
