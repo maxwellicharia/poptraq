@@ -1,27 +1,38 @@
 import os
-
-from flask import render_template, request, url_for, send_from_directory
-from poptraq.form import Signup
+import markdown
+from flask import render_template, request, url_for, send_from_directory, Markup
+from poptraq.form import Signup, Login
 from poptraq.models import User
 from poptraq import app, db, migrate
 
 
-@app.route('/')
+@app.route('/', methods=['GET', 'POST'])
 def dash():
-    return render_template("dash.html")
+    return render_template('dash.html')
 
 
-@app.route('/login')
+@app.route('/login', methods=['GET', 'POST'])
 def login():
-    return render_template("login.html")
+    form = Login(request.form)  # instantiating form to use the forms defined from the Form class in form.py
+
+    if request.method == 'GET':
+        return render_template('login.html', form=form)
+    else:
+        if not form.validate_on_submit():  # making sure that the form is validated before submission
+            return render_template('login.html', form=form, not_validate=True)
+        else:
+            # User.__init__(national_id=request.form['national_id'],
+            #               email=request.form['email'],
+            #               password=request.form['password'])
+            return url_for('account')
 
 
-@app.route('/logout')
+@app.route('/logout', methods=['GET', 'POST'])
 def logout():
     return "To configure"
 
 
-@app.route('/signup')
+@app.route('/signup', methods=['GET', 'POST'])
 def signup():
     form = Signup(request.form)  # instantiating form to use the forms defined from the Form class in form.py
 
@@ -41,9 +52,17 @@ def signup():
             return url_for('account')
 
 
-@app.route('/account/')
+@app.route('/account/', methods=['GET', 'POST'])
 def account():
-    return render_template("account.html")
+    return render_template('account.html')
+
+
+@app.route('/about')
+def about():
+    with open("./docs/README.md") as f:
+        content = f.read()
+    content = Markup(markdown.markdown(content))
+    return render_template('about.html', **locals())
 
 
 @app.route('/favicon.ico')
