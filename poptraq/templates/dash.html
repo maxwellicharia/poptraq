@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+
+{% import "bootstrap/wtf.html" as wtf %}
+
+<html>
+    <head>
+        <title>{% block title %} Poptraq {% endblock title %}</title>
+
+        <link rel="shortcut icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
+
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <!-- Bootstrap -->
+        <link href="{{bootstrap_find_resource('css/bootstrap.css', cdn='bootstrap')}}" rel="stylesheet">
+
+    </head>
+
+    <body>
+        <nav class="navbar navbar-inverse navbar-fixed-top">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                  <a class="navbar-brand" href="{{ url_for('dash')}}">Poptraq</a>
+                </div>
+                <ul class="nav navbar-nav">
+                  <li><a href="{{ url_for('about')}}">About</a></li>
+                </ul>
+
+                <form class="navbar-form navbar-left" action="">
+                  <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Search">
+                    <div class="input-group-btn">
+                      <button class="btn btn-success" type="submit">
+                        <i class="glyphicon glyphicon-search"></i>
+                      </button>
+                    </div>
+                  </div>
+                </form>
+
+                {% block nav %}
+                <ul class="nav navbar-nav navbar-right">
+                  <li><a href="{{ url_for('signup')}}"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+                  <li><a href="{{ url_for('login')}}"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+                </ul>
+                {% endblock %}
+            </div>
+        </nav>
+        <br/>
+        <br/>
+
+    {% block content %}
+        <div class="container">
+            <center>
+                <h1>Poptraq - Population Analyser</h1>
+                <h2>Current Statistics Data</h2>
+            </center>
+        </div>
+    <br>
+    <div id="results">
+        <table class="table table-hover table-striped table-responsive">
+            <thead>
+            <tr>
+                <th>County ID</th>
+                <th>County</th>
+                <th>Sub-Counties</th>
+                <th>Sectors</th>
+                <th>Population</th>
+                <th>Budget</th>
+                <th>Size</th>
+            </tr>
+            </thead>
+
+            {% for result in results%}
+            <tr>
+                <td>{{ result[0] }}</td>
+                <td>{{ result[1] }}</td>
+                <td>{{ result[2] }}</td>
+                <td>{{ result[3] }}</td>
+                <td>{{ result[4] }}</td>
+                <td>{{ result[5] }}</td>
+                <td>{{ result[6] }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+    {% endblock %}
+    </body>
+
+</html>

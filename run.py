@@ -1,5 +1,7 @@
-from controller import app
+from poptraq import views
 
 
-if __name__=='__main__':
+app = views.create_app()
+
+if __name__ == '__main__':
     app.run(debug=True)
