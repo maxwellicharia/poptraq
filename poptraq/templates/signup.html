@@ -1,29 +1,25 @@
-{% extends "bootstrap/base.html" %}
+{% extends "dash.html" %}
 
-{% import "bootstrap/wtf.html" as wtf %}
+{% block title %} Signup {% endblock %}
 
-{% block title %}
-
-Signup
-
+{% block nav %}
+<ul class="nav navbar-nav navbar-right">
+  <li><a href="{{ url_for('login')}}"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+</ul>
 {% endblock %}
 
 {% block content %}
-
 <div class="container">
-
     <br/>
     <h2>Signup</h2>
 
     {% if not_validate %}
-
-    {% for message in form.errors %}
-    <div class="error">{{ message }}</div>
-    {% endfor %}
-
+        {% for message in form.errors %}
+            <div class="error">{{ message }}</div>
+        {% endfor %}
     {% endif %}
 
-    <form method="POST" action="/signup">
+    <form class="form-horizontal col-sm-8" method="POST" action="/signup">
         <dl>
             {{ form.csrf_token }}
             {{ wtf.form_field(form.national_id) }}
@@ -37,13 +33,5 @@ Signup
         </dl>
         <input class="btn btn-success" type="submit" value="Submit"/>
     </form>
-
-    <br/>
-
-    <a class="btn btn-primary" href="{{ url_for('dash')}}" role="button">Back to Home</a>
-
-    <a class="btn btn-warning" href="{{ url_for('login')}}" role="button">Login</a>
-
 </div>
-
 {% endblock %}
