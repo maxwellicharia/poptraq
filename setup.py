@@ -22,12 +22,14 @@ setup(
         'Flask',
         'Flask-Bootstrap',
         'Flask-CLI',
+        'Flask-Debug',
         'Flask-Markdown',
         'Flask-Migrate',
         'Flask-Script',
         'Flask-SQLAlchemy',
         'Flask-WTF',
         'gunicorn',
+        'inflection',
         'itsdangerous',
         'Jinja2',
         'Mako',
@@ -43,7 +45,6 @@ setup(
         'SQLAlchemy',
         'visitor',
         'Werkzeug',
-        'WTForms'
-        ,
+        'WTForms',
     ],
 )
