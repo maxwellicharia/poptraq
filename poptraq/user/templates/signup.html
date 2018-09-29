@@ -1,11 +1,13 @@
-{% extends "dash.html" %}
+{% extends "layout.html" %}
+
+{% import "bootstrap/wtf.html" as wtf %}
 
 {% block title %} Signup {% endblock %}
 
 {% block nav %}
-<ul class="nav navbar-nav navbar-right">
-  <li><a href="{{ url_for('login')}}"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
-</ul>
+    <ul class="nav navbar-nav navbar-right">
+      <li><a href="{{ url_for('user.login')}}"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+    </ul>
 {% endblock %}
 
 {% block content %}
@@ -13,22 +15,37 @@
     <br/>
     <h2>Signup</h2>
 
-    {% if not_validate %}
-        {% for message in form.errors %}
-            <div class="error">{{ message }}</div>
-        {% endfor %}
-    {% endif %}
-
-    <form class="form-horizontal col-sm-8" method="POST" action="/signup">
+    <form class="form-horizontal col-sm-8" method="POST" action="{{ url_for('user.signup')}}">
         <dl>
             {{ form.csrf_token }}
             {{ wtf.form_field(form.national_id) }}
+                {% for message in form.national_id.errors %}
+                   {{ message }}
+                {% endfor %}
             {{ wtf.form_field(form.first_name) }}
+                {% for message in form.first_name.errors %}
+                   {{ message }}
+                {% endfor %}
             {{ wtf.form_field(form.surname) }}
+                {% for message in form.surname.errors %}
+                   {{ message }}
+                {% endfor %}
             {{ wtf.form_field(form.dob) }}
+                {% for message in form.dob.errors %}
+                   {{ message }}
+                {% endfor %}
             {{ wtf.form_field(form.email) }}
+                {% for message in form.email.errors %}
+                   {{ message }}
+                {% endfor %}
             {{ wtf.form_field(form.home_county) }}
+                {% for message in form.home_county.errors %}
+                   {{ message }}
+                {% endfor %}
             {{ wtf.form_field(form.password) }}
+                {% for message in form.password.errors %}
+                   {{ message }}
+                {% endfor %}
             {{ wtf.form_field(form.confirm_password) }}
         </dl>
         <input class="btn btn-success" type="submit" value="Submit"/>

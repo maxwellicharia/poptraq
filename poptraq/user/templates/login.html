@@ -1,10 +1,12 @@
-{% extends "dash.html" %}
+{% extends "layout.html" %}
+
+{% import "bootstrap/wtf.html" as wtf %}
 
 {% block title %} Login {% endblock %}
 
 {% block nav %}
 <ul class="nav navbar-nav navbar-right">
-  <li><a href="{{ url_for('signup')}}"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+  <li><a href="{{ url_for('user.signup')}}"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
 </ul>
 {% endblock %}
 
@@ -13,18 +15,21 @@
     <br/>
     <h2>Login</h2>
 
-    {% if not_validate %}
-        {% for message in form.errors %}
-            <div class="error">{{ message }}</div>
-        {% endfor %}
-    {% endif %}
-
-    <form class="form-horizontal col-sm-8" method="POST" action="/login">
+    <form class="form-horizontal col-sm-8" method="POST" action="{{ url_for('user.login')}}">
         <dl>
             {{ form.csrf_token }}
             {{ wtf.form_field(form.national_id) }}
+                {% for message in form.national_id.errors %}
+                   {{ message }}
+                {% endfor %}
             {{ wtf.form_field(form.email) }}
+                {% for message in form.email.errors %}
+                   {{ message }}
+                {% endfor %}
             {{ wtf.form_field(form.password) }}
+                {% for message in form.password.errors %}
+                   {{ message }}
+                {% endfor %}
         </dl>
         <input class="btn btn-success" type="submit" value="Submit"/>
     </form>
