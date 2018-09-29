@@ -14,7 +14,7 @@ class Signup(FlaskForm):
     home_county = StringField("Home County", [validators.DataRequired(message="Kindly input your last name")])
     password = PasswordField("Password", [validators.DataRequired(message="Input Password"), validators.Length(min=8),
                                           validators.EqualTo('confirm_password', message='Passwords must match')])
-    confirm_password = StringField("Repeat Password")
+    confirm_password = PasswordField("Repeat Password")
 
 
 class Login(FlaskForm):
