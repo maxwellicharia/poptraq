@@ -11,7 +11,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
         <!-- Bootstrap -->
-        <link href="{{bootstrap_find_resource('css/bootstrap.css', cdn='bootstrap')}}" rel="stylesheet">
+        <link href="{{bootstrap_find_resource('css/bootstrap.css', cdn='bootstrap')}}" rel="stylesheet">z
 
     </head>
 
@@ -38,8 +38,8 @@
 
                 {% block nav %}
                 <ul class="nav navbar-nav navbar-right">
-                  <li><a href="{{ url_for('signup')}}"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
-                  <li><a href="{{ url_for('login')}}"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+                  <li><a href="{{ url_for('user.signup')}}"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+                  <li><a href="{{ url_for('user.login')}}"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
                 </ul>
                 {% endblock %}
             </div>
