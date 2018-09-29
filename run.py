@@ -1,7 +1,6 @@
-from poptraq import views
+import poptraq
 
-
-app = views.create_app()
+app = poptraq.app
 
 if __name__ == '__main__':
     app.run(debug=True)
