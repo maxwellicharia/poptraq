@@ -3,9 +3,26 @@
 {% block title %} About {% endblock %}
 
 {% block nav %}
-    {{ super() }}
+    {% if email %}
+        <ul class="nav navbar-nav navbar-right">
+            <p class="navbar-text">{{ email }}</p>
+            <li><a href="{{ url_for('user.logout')}}"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+        </ul>
+    {% else %}
+        {{ super() }}
+    {% endif %}
 {% endblock %}
 
 {% block content %}
+    {% if email %}
+        <div class="alert alert-info alert-dismissible text-center">
+            Already logged in as: <strong>{{ email }}. </strong>
+            <a href="{{ url_for('user.account')}}" class="alert-link" style="color:green;"> Proceed</a>
+            or
+            <a href="{{ url_for('user.logout')}}" class="alert-link" style="color:red;"> Logout</a>
+            <a href="" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        </div>
+    {% endif %}
+
     {{ content }}
 {% endblock %}
