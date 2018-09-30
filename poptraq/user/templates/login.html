@@ -5,12 +5,30 @@
 {% block title %} Login {% endblock %}
 
 {% block nav %}
-<ul class="nav navbar-nav navbar-right">
-  <li><a href="{{ url_for('user.signup')}}"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
-</ul>
+    <ul class="nav navbar-nav navbar-right">
+      <li><a href="{{ url_for('user.signup')}}"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+    </ul>
 {% endblock %}
 
 {% block content %}
+    {% if email %}
+        <div class="alert alert-info alert-dismissible text-center">
+            Already logged in as: <strong>{{ email }}. </strong>
+            <a href="{{ url_for('user.account')}}" class="alert-link" style="color:green;"> Proceed</a>
+            or
+            <a href="{{ url_for('user.logout')}}" class="alert-link" style="color:red;"> Logout</a>
+            <a href="" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        </div>
+    {% endif %}
+
+    {% if not_found %}
+        <div class="alert alert-danger alert-dismissible text-center">
+            You are not in the system,
+            <a href="{{ url_for('user.signup')}}" class="alert-link" style="color:green;"> signup</a>
+            to proceed.
+            <a href="" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        </div>
+    {% endif %}
 <div class="container">
     <br/>
     <h2>Login</h2>
