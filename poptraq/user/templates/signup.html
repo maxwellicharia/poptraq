@@ -11,6 +11,24 @@
 {% endblock %}
 
 {% block content %}
+    {% if email %}
+        <div class="alert alert-info alert-dismissible text-center w-25 p-3">
+            Already logged in as: <strong>{{ email }}. </strong>
+            <a href="{{ url_for('user.account')}}" class="alert-link" style="color:green;"> Proceed</a>
+            or
+            <a href="{{ url_for('user.logout')}}" class="alert-link" style="color:red;"> Logout</a>
+            <a href="" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        </div>
+    {% endif %}
+
+    {% if exists %}
+        <div class="alert alert-warning alert-dismissible text-center">
+            <strong>User credentials already exist.</strong>
+            <a href="{{ url_for('user.login')}}" class="alert-link" style="color:green;"> Login</a>
+            or <strong>Typo</strong>?
+            <a href="" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        </div>
+    {% endif %}
 <div class="container">
     <br/>
     <h2>Signup</h2>
@@ -19,33 +37,12 @@
         <dl>
             {{ form.csrf_token }}
             {{ wtf.form_field(form.national_id) }}
-                {% for message in form.national_id.errors %}
-                   {{ message }}
-                {% endfor %}
             {{ wtf.form_field(form.first_name) }}
-                {% for message in form.first_name.errors %}
-                   {{ message }}
-                {% endfor %}
             {{ wtf.form_field(form.surname) }}
-                {% for message in form.surname.errors %}
-                   {{ message }}
-                {% endfor %}
             {{ wtf.form_field(form.dob) }}
-                {% for message in form.dob.errors %}
-                   {{ message }}
-                {% endfor %}
             {{ wtf.form_field(form.email) }}
-                {% for message in form.email.errors %}
-                   {{ message }}
-                {% endfor %}
             {{ wtf.form_field(form.home_county) }}
-                {% for message in form.home_county.errors %}
-                   {{ message }}
-                {% endfor %}
             {{ wtf.form_field(form.password) }}
-                {% for message in form.password.errors %}
-                   {{ message }}
-                {% endfor %}
             {{ wtf.form_field(form.confirm_password) }}
         </dl>
         <input class="btn btn-success" type="submit" value="Submit"/>
