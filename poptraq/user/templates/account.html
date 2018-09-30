@@ -4,20 +4,26 @@
 
 {% block nav %}
     <ul class="nav navbar-nav navbar-right">
-        <p class="navbar-text">{% if message %} {{ message[1] }} {% endif %}</p>
+        <li><p class="navbar-text">{% if message %} {{ message }} {% endif %}</p></li>
         <li><a href="{{ url_for('user.logout')}}"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
     </ul>
 {% endblock %}
 
 {% block content %}
     <div class="container">
-        <div class="col-md-4 col-md-offset-4 textCenter" id="close">
+        <div class="text-center" id="close">
         {% if message %}
-            <div class="alert alert-success alert-dismissible fade in textCenter">
-                {{ message[0] }} <strong>{{ message[1] }}</strong>
+            <div class="alert alert-success text-center">
+                Created your account successfully:  <strong>{{ message }}</strong>
             </div>
         {% endif %}
         </div>
+
+        {% if login %}
+            <div class="alert alert-success text-center">
+                You are logged in as: <strong>{{ login }}</strong>
+            </div>
+        {% endif %}
 
         <div>
             <br/>
@@ -30,5 +36,4 @@
             $("#close").slideUp(2000);
         });
     </script>
-
 {% endblock %}
