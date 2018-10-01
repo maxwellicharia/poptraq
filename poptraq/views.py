@@ -1,77 +1,33 @@
 import os
 import markdown
-from flask import render_template, request, url_for, send_from_directory, Markup
-from poptraq.form import Signup, Login
-from poptraq.models import User
-from poptraq import app, db, migrate
+from flask import render_template, send_from_directory, Markup, session
+from poptraq import app
 
 
-@app.route('/', methods=['GET', 'POST'])
-def dash():
-    return render_template('dash.html')
-
-
-@app.route('/login', methods=['GET', 'POST'])
-def login():
-    form = Login(request.form)  # instantiating form to use the forms defined from the Form class in form.py
-
-    if request.method == 'GET':
-        return render_template('login.html', form=form)
+@app.route('/', methods=['GET'])
+def index():
+    if session.get('email') is None:
+        return render_template('index.html')
     else:
-        if not form.validate_on_submit():  # making sure that the form is validated before submission
-            return render_template('login.html', form=form, not_validate=True)
-        else:
-            # User.__init__(national_id=request.form['national_id'],
-            #               email=request.form['email'],
-            #               password=request.form['password'])
-            return url_for('account')
+        email = session['email']
+        return render_template('index.html', email=email)
 
 
-@app.route('/logout', methods=['GET', 'POST'])
-def logout():
-    return "To configure"
-
-
-@app.route('/signup', methods=['GET', 'POST'])
-def signup():
-    form = Signup(request.form)  # instantiating form to use the forms defined from the Form class in form.py
-
-    if request.method == 'GET':
-        return render_template('signup.html', form=form)
-    else:
-        if not form.validate_on_submit():  # making sure that the form is validated before submission
-            return render_template('signup.html', form=form, not_validate=True)
-        else:
-            User.__init__(national_id=request.form['national_id'],
-                          first_name=request.form['first_name'],
-                          surname=request.form['surname'],
-                          dob=request.form['dob'],
-                          home_county=request.form['home_county'],
-                          email=request.form['email'],
-                          password=request.form['password'])
-            return url_for('account')
-
-
-@app.route('/account/', methods=['GET', 'POST'])
-def account():
-    return render_template('account.html')
-
-
-@app.route('/about')
+@app.route('/about', methods=['GET'])
 def about():
-    with open("./docs/README.md") as f:
-        content = f.read()
-    content = Markup(markdown.markdown(content))
-    return render_template('about.html', **locals())
+    if session.get('email') is None:
+        with open("./docs/README.md") as f:
+            content = f.read()
+        content = Markup(markdown.markdown(content))
+        return render_template('about.html', content=content)
+    else:
+        email = session['email']
+        with open("./docs/README.md") as f:
+            content = f.read()
+        content = Markup(markdown.markdown(content))
+        return render_template('about.html', **locals())
 
 
 @app.route('/favicon.ico')
 def fav():
-    return send_from_directory(os.path.join(app.root_path, 'static'), 'favicon.ico')
-
-
-def create_app():
-    db.app = app
-    db.init_app(app)
-    migrate.init_app(app, db)
-    return app
+    return send_from_directory(os.path.join(app.root_path, './static/img'), 'favicon.ico')

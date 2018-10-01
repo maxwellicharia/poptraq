@@ -1,0 +1,81 @@
+{% extends "layout.html" %}
+
+{% block title %} Poptraq {% endblock title %}
+
+{% block nav %}
+    {% if email %}
+        <ul class="nav navbar-nav navbar-right">
+            <p class="navbar-text">{{ email }}</p>
+            <li><a href="{{ url_for('user.logout')}}"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+        </ul>
+    {% else %}
+        <ul class="nav navbar-nav navbar-right">
+            <li><a href="{{ url_for('user.signup')}}"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+            <li><a href="{{ url_for('user.login')}}"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+        </ul>
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+    {% if email %}
+        <div class="alert alert-info alert-dismissible text-center">
+            You are logged in as: <strong>{{ email }}. </strong>
+            <a href="{{ url_for('user.account')}}" class="alert-link" style="color:green;"> Proceed</a>
+            or
+            <a href="{{ url_for('user.logout')}}" class="alert-link" style="color:red;"> Logout</a>
+            <a href="" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        </div>
+    {% endif %}
+
+    {% if log_out %}
+        <div class="alert alert-info alert-dismissible text-center">
+            You are logged out.
+            <a href="{{ url_for('user.login')}}" class="alert-link" style="color:blue;"> Login</a>
+            or
+            <a href="{{ url_for('user.signup')}}" class="alert-link" style="color:green;"> Signup</a>?
+            <a href="" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        </div>
+    {% endif %}
+
+    {% if success %}
+        <div class="alert alert-success alert-dismissible text-center">
+            Logout Successful!
+            <a href="" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        </div>
+    {% endif %}
+
+    <div class="container">
+        <center>
+            <h1>Poptraq - Population Analyser</h1>
+            <h2>Current Statistics Data</h2>
+        </center>
+    </div>
+<br>
+<div id="results">
+    <table class="table table-hover table-striped table-responsive">
+        <thead>
+        <tr>
+            <th>County ID</th>
+            <th>County</th>
+            <th>Sub-Counties</th>
+            <th>Sectors</th>
+            <th>Population</th>
+            <th>Budget</th>
+            <th>Size</th>
+        </tr>
+        </thead>
+
+        {% for result in results%}
+        <tr>
+            <td>{{ result[0] }}</td>
+            <td>{{ result[1] }}</td>
+            <td>{{ result[2] }}</td>
+            <td>{{ result[3] }}</td>
+            <td>{{ result[4] }}</td>
+            <td>{{ result[5] }}</td>
+            <td>{{ result[6] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+{% endblock %}

@@ -1,0 +1,39 @@
+{% extends "layout.html" %}
+
+{% block title %} Account {% endblock %}
+
+{% block nav %}
+    <ul class="nav navbar-nav navbar-right">
+        <li><p class="navbar-text">{% if message %} {{ message }} {% endif %}</p></li>
+        <li><a href="{{ url_for('user.logout')}}"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+    </ul>
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="text-center" id="close">
+        {% if message %}
+            <div class="alert alert-success text-center">
+                Created your account successfully:  <strong>{{ message }}</strong>
+            </div>
+        {% endif %}
+        </div>
+
+        {% if login %}
+            <div class="alert alert-success text-center">
+                You are logged in as: <strong>{{ login }}</strong>
+            </div>
+        {% endif %}
+
+        <div>
+            <br/>
+            <h2>Dashboard</h2>
+        </div>
+    </div>
+
+    <script>
+        $("#close").fadeTo(2000, 500).slideUp(2000, function(){
+            $("#close").slideUp(2000);
+        });
+    </script>
+{% endblock %}
