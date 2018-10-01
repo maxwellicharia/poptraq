@@ -75,7 +75,11 @@ def login():
                     message = session['email']
                     return render_template('account.html', message=message)
                 else:
-                    return render_template('login.html', form=form, not_found=True)
+                    if (exists_id is not None) and (exists_email is not None) and (
+                            check_password_hash(exists_password, password) is False):
+                        return render_template('login.html', invalid=True)
+                    else:
+                        return render_template('login.html', form=form, not_found=True)
             else:
                 email = session['email']
                 return render_template('login.html', form=form, login=email)
