@@ -11,7 +11,7 @@ class Signup(FlaskForm):
     surname = StringField("Surname", [DataRequired(message="Kindly input your last name")])
     dob = StringField("Date of Birth", [DataRequired(message="Kindly input your Date of Birth")])
     email = StringField("Email", [DataRequired(message="Kindly input your Email Address"), Email(
-        message="Invalid Email Address")])
+        message="Invalid Email Address, missing '@' symbol")])
     home_county = StringField("Home County", [DataRequired(message="Kindly input your last name")])
     password = PasswordField("Password", [DataRequired(message="Input Password"),
                                           Length(min=8, message="Password too short > 8"),
@@ -24,7 +24,7 @@ class Login(FlaskForm):
 
     national_id = IntegerField("National ID", [DataRequired(message="National ID required")])
     email = StringField("Email", [DataRequired(message="Email Address required"), Email(
-        message="Invalid Email Address")])
+        message="Invalid Email Address, missing '@' symbol")])
     password = PasswordField("Password", [DataRequired(message="Password required")])
 
 
@@ -37,3 +37,15 @@ class County(FlaskForm):
     population = FloatField("Population", [DataRequired(message="Input estimated calculated population")])
     budget = FloatField("Budget (Ksh)", [DataRequired(message="Input allocated budget")])
     size = FloatField("County Size", [DataRequired(message="Input county size")])
+
+
+class EmailForm(FlaskForm):
+    email = StringField("Email", [DataRequired(message="Email Address required"), Email(
+        message="Invalid Email Address, missing '@' symbol")])
+
+
+class PasswordForm(FlaskForm):
+    password = PasswordField("Password", [DataRequired(message="Input Password"),
+                                          Length(min=8, message="Password too short > 8"),
+                                          EqualTo('confirm_password', message='Passwords must match')])
+    confirm_password = PasswordField("Repeat Password")
