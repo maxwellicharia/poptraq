@@ -16,7 +16,8 @@ class User(db.Model):
     email = db.Column(db.String(200), nullable=False, unique=True)
     password = db.Column(db.String, nullable=False,)
     created = db.Column(db.TIMESTAMP, nullable=False, default=datetime.utcnow)
-    last_seen = db.Column(db.TIMESTAMP, nullable=True, default=datetime.utcnow)
+    last_seen = db.Column(db.TIMESTAMP, nullable=False, default=datetime.utcnow)
+    confirmed = db.Column(db.Boolean, nullable=False, default=False)
 
     def __init__(self, national_id, first_name, surname, dob, home_county, email, password):
         self.national_id = national_id
