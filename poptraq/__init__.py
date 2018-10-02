@@ -7,7 +7,7 @@ from flask_debug import Debug
 app = Flask(__name__)
 
 app.config['SECRET_KEY'] = "$poptraq#"
-app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://postgres:postgres@localhost:5432/poptraq"
+app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://postgres:postgres@localhost:5432/potraq"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['TEMPLATES_AUTO_RELOAD'] = True
 
