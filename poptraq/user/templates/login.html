@@ -8,6 +8,7 @@
     <ul class="nav navbar-nav navbar-right">
       <li><a href="{{ url_for('user.signup')}}"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
     </ul>
+<script src='https://www.google.com/recaptcha/api.js'></script>
 {% endblock %}
 
 {% block content %}
@@ -29,6 +30,22 @@
             <a href="" class="close" data-dismiss="alert" aria-label="close">&times;</a>
         </div>
     {% endif %}
+<!--Setting password reset on this link-->
+    {% if invalid %}
+        <div class="alert alert-danger alert-dismissible text-center">
+            You are not in the system,
+            <a href="{{ url_for('user.signup')}}" class="alert-link" style="color:green;"> signup</a>
+            to proceed.
+            <a href="" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        </div>
+    {% endif %}
+
+    {% if to_confirm %}
+        <div class="alert alert-danger alert-dismissible text-center">
+            Login to confirm Account.
+            <a href="" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        </div>
+    {% endif %}
 <div class="container">
     <br/>
     <h2>Login</h2>
@@ -37,17 +54,9 @@
         <dl>
             {{ form.csrf_token }}
             {{ wtf.form_field(form.national_id) }}
-                {% for message in form.national_id.errors %}
-                   {{ message }}
-                {% endfor %}
             {{ wtf.form_field(form.email) }}
-                {% for message in form.email.errors %}
-                   {{ message }}
-                {% endfor %}
             {{ wtf.form_field(form.password) }}
-                {% for message in form.password.errors %}
-                   {{ message }}
-                {% endfor %}
+            <div class="g-recaptcha" data-sitekey="6LfgSHMUAAAAAPCT_9i_stHIR_AxowHyHvF-oD0z"></div>
         </dl>
         <input class="btn btn-success" type="submit" value="Submit"/>
     </form>

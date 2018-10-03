@@ -5,9 +5,18 @@
 {% block title %} Signup {% endblock %}
 
 {% block nav %}
-    <ul class="nav navbar-nav navbar-right">
-      <li><a href="{{ url_for('user.login')}}"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
-    </ul>
+    {% if email %}
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="{{ url_for('user.logout')}}"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
+        </ul>
+    {% endif %}
+
+    {% if exists%}
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="{{ url_for('user.login')}}"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+        </ul>
+    {% endif %}
+<script src='https://www.google.com/recaptcha/api.js'></script>
 {% endblock %}
 
 {% block content %}
@@ -44,6 +53,7 @@
             {{ wtf.form_field(form.home_county) }}
             {{ wtf.form_field(form.password) }}
             {{ wtf.form_field(form.confirm_password) }}
+            <div class="g-recaptcha" data-sitekey="6LfgSHMUAAAAAPCT_9i_stHIR_AxowHyHvF-oD0z"></div>
         </dl>
         <input class="btn btn-success" type="submit" value="Submit"/>
     </form>
