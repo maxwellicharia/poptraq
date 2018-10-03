@@ -1,0 +1,26 @@
+{% extends "layout.html" %}
+
+{% block title %} Confirm {% endblock %}
+
+{% block nav %}
+    {% if logged_in %}
+        <ul class="nav navbar-nav navbar-right">
+            <li><p class="navbar-text"> {{ logged_in }} </p></li>
+            <li><a href="{{ url_for('user.logout')}}"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+        </ul>
+    {% else %}
+        <ul class="nav navbar-nav navbar-right">
+            <li><a href="{{ url_for('user.login')}}"><span class="glyphicon glyphicon-log-out"></span> Login</a></li>
+        </ul>
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+    {% if expired%}
+        </p>The confirmation link is invalid or has expired<p>
+    {% elif confirmed %}
+        </p>Account has already been confirmed<p>
+    {% else %}
+        <p>An error occurred</p>
+    {% endif %}
+{% endblock %}
