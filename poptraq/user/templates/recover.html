@@ -1,0 +1,55 @@
+{% extends "layout.html" %}
+
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %} Recover Password {% endblock %}
+
+{% block nav %}
+    <ul class="nav navbar-nav navbar-right">
+        <li><p class="navbar-text">{{ message }}</p></li>
+      <li><a href="{{ url_for('user.logout')}}"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+    </ul>
+<script src='https://www.google.com/recaptcha/api.js'></script>
+{% endblock %}
+
+{% block content %}
+    {% if reset %}
+        <div class="alert alert-danger alert-dismissible text-center">
+            A reset link has been sent to: <strong>{{ email }}</strong>
+            <a href="" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        </div>
+
+    <div class="container">
+        <br/>
+        <h2>Confirm Credentials user credentials to reset password</h2>
+
+        <form class="form-horizontal col-sm-8" method="POST" action="{{ url_for('user.recover')}}">
+            <dl>
+                {{ form.csrf_token }}
+                {{ wtf.form_field(form.national_id) }}
+                {{ wtf.form_field(form.email) }}
+                <div class="g-recaptcha" data-sitekey="6LfgSHMUAAAAAPCT_9i_stHIR_AxowHyHvF-oD0z"></div>
+            </dl>
+            <input class="btn btn-success" type="submit" value="Submit"/>
+        </form>
+    </div>
+    {% endif %}
+
+    {% if new %}
+        <div class="container">
+        <br/>
+        <h2>New Password</h2>
+            <form class="form-horizontal col-sm-8" method="POST" action="{{ url_for('user.recover')}}">
+                <dl>
+                    {{ form.csrf_token }}
+                    {{ wtf.form_field(form.national_id) }}
+                    {{ wtf.form_field(form.email) }}
+                    {{ wtf.form_field(form.password) }}
+                    {{ wtf.form_field(form.confirm_password) }}
+                    <div class="g-recaptcha" data-sitekey="6LfgSHMUAAAAAPCT_9i_stHIR_AxowHyHvF-oD0z"></div>
+                </dl>
+                <input class="btn btn-success" type="submit" value="Submit"/>
+            </form>
+        </div>
+    {% endif %}
+{% endblock %}

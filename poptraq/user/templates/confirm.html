@@ -1,17 +1,15 @@
 {% extends "layout.html" %}
 
-{% block title %} Account {% endblock %}
+{% block title %} Confirm {% endblock %}
 
 {% block nav %}
     <ul class="nav navbar-nav navbar-right">
-        <li><p class="navbar-text">
-            {{ current_user.email }}
+        <li><p class="navbar-text"> {{ logged_in }} </p></li>
         <li><a href="{{ url_for('user.logout')}}"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
     </ul>
 {% endblock %}
 
 {% block content %}
-
     {% with messages = get_flashed_messages(with_categories=true) %}
       <!-- Categories: success (green), info (blue), warning (yellow), danger (red) -->
       {% if messages %}
@@ -25,9 +23,4 @@
         {% endfor %}
       {% endif %}
     {% endwith %}
-
-    <div class="container">
-        <br/>
-        <h2>Dashboard</h2>
-    </div>
 {% endblock %}

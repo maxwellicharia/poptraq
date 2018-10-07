@@ -1,10 +1,15 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Unauthorised</title>
-</head>
-<body>
+{% extends "layout.html" %}
 
-</body>
-</html>
+{% block title %} Unauthorised {% endblock %}
+
+{% block nav %}
+
+{% endblock %}
+
+{% block content %}
+    <div class="alert alert-danger alert-dismissible text-center">
+        Unauthorised system access.
+        <a href="{{ url_for('index')}}" class="alert-link" style="color:green;"> Home</a>.
+        <a href="" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    </div>
+{% endblock %}

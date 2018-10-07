@@ -10,7 +10,7 @@
         </ul>
     {% else %}
         <ul class="nav navbar-nav navbar-right">
-            <li><a href="{{ url_for('user.signup')}}"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+            <li><a href="{{ url_for('user.register')}}"><span class="glyphicon glyphicon-user"></span> Register</a></li>
             <li><a href="{{ url_for('user.login')}}"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
         </ul>
     {% endif %}
@@ -32,13 +32,13 @@
             You are logged out.
             <a href="{{ url_for('user.login')}}" class="alert-link" style="color:blue;"> Login</a>
             or
-            <a href="{{ url_for('user.signup')}}" class="alert-link" style="color:green;"> Signup</a>?
+            <a href="{{ url_for('user.register')}}" class="alert-link" style="color:green;"> Signup</a>?
             <a href="" class="close" data-dismiss="alert" aria-label="close">&times;</a>
         </div>
     {% endif %}
 
     {% if success %}
-        <div class="alert alert-success alert-dismissible text-center">
+        <div class="alert alert-success alert-dismissible text-center close">
             Logout Successful!
             <a href="" class="close" data-dismiss="alert" aria-label="close">&times;</a>
         </div>
