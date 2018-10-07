@@ -1,9 +1,10 @@
-from flask_wtf import FlaskForm
-from wtforms import StringField, IntegerField, PasswordField, FloatField
-from wtforms.validators import DataRequired, Email, EqualTo, Length
+from flask_wtf import FlaskForm, RecaptchaField
+from wtforms import StringField, IntegerField, PasswordField, FloatField, BooleanField
+from wtforms.validators import DataRequired, Email, EqualTo, Length, ValidationError
+from poptraq.models import User
 
 
-class Signup(FlaskForm):
+class RegistrationForm(FlaskForm):
     """Template for signup form creation"""
 
     national_id = IntegerField("National ID", [DataRequired(message="Kindly input your National ID Number")])
@@ -14,18 +15,33 @@ class Signup(FlaskForm):
         message="Invalid Email Address, missing '@' symbol")])
     home_county = StringField("Home County", [DataRequired(message="Kindly input your last name")])
     password = PasswordField("Password", [DataRequired(message="Input Password"),
-                                          Length(min=8, message="Password too short > 8"),
+                                          Length(min=8, message="Password too short > 8"), Length(max=16),
                                           EqualTo('confirm_password', message='Passwords must match')])
-    confirm_password = PasswordField("Repeat Password")
+    confirm_password = PasswordField("Repeat Password", [DataRequired(message="Confirm Password"),
+                                                         EqualTo('password', message='Passwords must match')])
+    recaptcha = RecaptchaField()
+    remember_me = BooleanField('Remember Me')
+
+    def validate_national_id(self, national_id):
+        user = User.query.filter_by(national_id=national_id.data).first()
+        if user is not None:
+            raise ValidationError('National ID already used by a different user.')
+
+    def validate_email(self, email):
+        user = User.query.filter_by(email=email.data).first()
+        if user is not None:
+            raise ValidationError('Email address already exists')
 
 
-class Login(FlaskForm):
+class LoginForm(FlaskForm):
     """Template for Login Form creation"""
 
     national_id = IntegerField("National ID", [DataRequired(message="National ID required")])
     email = StringField("Email", [DataRequired(message="Email Address required"), Email(
         message="Invalid Email Address, missing '@' symbol")])
     password = PasswordField("Password", [DataRequired(message="Password required")])
+    recaptcha = RecaptchaField()
+    remember_me = BooleanField('Remember Me')
 
 
 class County(FlaskForm):
@@ -40,12 +56,19 @@ class County(FlaskForm):
 
 
 class EmailForm(FlaskForm):
+    national_id = IntegerField("National ID", [DataRequired(message="National ID required")])
     email = StringField("Email", [DataRequired(message="Email Address required"), Email(
         message="Invalid Email Address, missing '@' symbol")])
+    recaptcha = RecaptchaField()
 
 
 class PasswordForm(FlaskForm):
+    national_id = IntegerField("National ID", [DataRequired(message="National ID required")])
+    email = StringField("Email", [DataRequired(message="Email Address required"), Email(
+        message="Invalid Email Address, missing '@' symbol")])
     password = PasswordField("Password", [DataRequired(message="Input Password"),
                                           Length(min=8, message="Password too short > 8"),
                                           EqualTo('confirm_password', message='Passwords must match')])
-    confirm_password = PasswordField("Repeat Password")
+    confirm_password = PasswordField("Repeat Password", [DataRequired(message="Confirm Password"),
+                                                         EqualTo('password', message='Passwords must match')])
+    recaptcha = RecaptchaField()
