@@ -24,6 +24,9 @@
     <!-- Bootstrap CSS-->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 
+    <!--App CSS-->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
+
 </head>
 
 <body>
@@ -49,7 +52,7 @@
 
             {% block nav %}
             <ul class="nav navbar-nav navbar-right">
-              <li><a href="{{ url_for('user.signup')}}"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+              <li><a href="{{ url_for('user.register')}}"><span class="glyphicon glyphicon-user"></span> Register</a></li>
               <li><a href="{{ url_for('user.login')}}"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
             </ul>
             {% endblock %}
