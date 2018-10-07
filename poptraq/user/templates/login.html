@@ -6,46 +6,26 @@
 
 {% block nav %}
     <ul class="nav navbar-nav navbar-right">
-      <li><a href="{{ url_for('user.signup')}}"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+      <li><a href="{{ url_for('user.register')}}"><span class="glyphicon glyphicon-user"></span> Register</a></li>
     </ul>
 <script src='https://www.google.com/recaptcha/api.js'></script>
 {% endblock %}
 
 {% block content %}
-    {% if email %}
-        <div class="alert alert-info alert-dismissible text-center">
-            Already logged in as: <strong>{{ email }}. </strong>
-            <a href="{{ url_for('user.account')}}" class="alert-link" style="color:green;"> Proceed</a>
-            or
-            <a href="{{ url_for('user.logout')}}" class="alert-link" style="color:red;"> Logout</a>
-            <a href="" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-        </div>
-    {% endif %}
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      <!-- Categories: success (green), info (blue), warning (yellow), danger (red) -->
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="alert alert-{{ category }} alert-dismissible text-center" role="alert">
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+              </button>
+              <!-- <strong>Title</strong> --> {{ message }}
+          </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
 
-    {% if not_found %}
-        <div class="alert alert-danger alert-dismissible text-center">
-            You are not in the system,
-            <a href="{{ url_for('user.signup')}}" class="alert-link" style="color:green;"> signup</a>
-            to proceed.
-            <a href="" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-        </div>
-    {% endif %}
-<!--Setting password reset on this link-->
-    {% if invalid %}
-        <div class="alert alert-danger alert-dismissible text-center">
-            You are not in the system,
-            <a href="{{ url_for('user.signup')}}" class="alert-link" style="color:green;"> signup</a>
-            to proceed.
-            <a href="" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-        </div>
-    {% endif %}
-
-    {% if to_confirm %}
-        <div class="alert alert-danger alert-dismissible text-center">
-            Login to confirm Account.
-            <a href="" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-        </div>
-    {% endif %}
 <div class="container">
     <br/>
     <h2>Login</h2>
@@ -56,7 +36,8 @@
             {{ wtf.form_field(form.national_id) }}
             {{ wtf.form_field(form.email) }}
             {{ wtf.form_field(form.password) }}
-            <div class="g-recaptcha" data-sitekey="6LfgSHMUAAAAAPCT_9i_stHIR_AxowHyHvF-oD0z"></div>
+            {{ wtf.form_field(form.recaptcha) }}
+            {{ wtf.form_field(form.remember_me) }}
         </dl>
         <input class="btn btn-success" type="submit" value="Submit"/>
     </form>
