@@ -5,37 +5,26 @@
 {% block nav %}
     <ul class="nav navbar-nav navbar-right">
         <li><p class="navbar-text">
-            {% if message %}
-                {{ message }}
-            {% elif login %}
-                {{ login }}
-            {% else %}
-            {% endif %}</p></li>
+            {{ current_user.email }}
         <li><a href="{{ url_for('user.logout')}}"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
     </ul>
 {% endblock %}
 
 {% block content %}
-<!--Bug-> sliding effect not working on account creation to fix sliding on both login, signup and account-->
-    {% if message %}
-        <div class="alert alert-success text-center slide">
-            Created your account successfully:  <strong>{{ message }}</strong>
-        </div>
-    {% elif login %}
-        <div class="alert alert-success text-center slide">
-            You are logged in as: <strong>{{ login }}</strong>
-        </div>
-    {% elif success %}
-        <div class="alert alert-success text-center slide">
-            Account confirmed successfully
-        </div>
-    {% elif sent %}
-        <div class="alert alert-info alert-dismissible text-center">
-            <p>A confirmation message has been sent to your emal address</p>
-            <a href="" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-        </div>
-    {% else %}
-    {% endif %}
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      <!-- Categories: success (green), info (blue), warning (yellow), danger (red) -->
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="alert alert-{{ category }} alert-dismissible text-center" role="alert">
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+              </button>
+              <!-- <strong>Title</strong> --> {{ message }}
+          </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
 
     <div class="container">
         <br/>
