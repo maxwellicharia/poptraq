@@ -1,4 +1,5 @@
 from flask import Flask
+from flask_login import LoginManager
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate, Manager, MigrateCommand
 from flask_bootstrap import Bootstrap
@@ -17,12 +18,13 @@ app.config.update(
     MAIL_DEFAULT_SENDER = "anyapp8@gmail.com",
 
     RECAPTCHA_ENABLED=True,
-    RECAPTCHA_SITE_KEY="6LfgSHMUAAAAAPCT_9i_stHIR_AxowHyHvF-oD0z",
-    RECAPTCHA_SECRET_KEY="6LfgSHMUAAAAAEhiNnOEep3jwRgATmKsdmjEpbl_",
+    RECAPTCHA_PUBLIC_KEY="6LfgSHMUAAAAAPCT_9i_stHIR_AxowHyHvF-oD0z",
+    RECAPTCHA_PRIVATE_KEY="6LfgSHMUAAAAAEhiNnOEep3jwRgATmKsdmjEpbl_",
     RECAPTCHA_THEME="dark",
     RECAPTCHA_TYPE="image",
     RECAPTCHA_SIZE="compact",
     RECAPTCHA_RTABINDEX=10,
+    RECAPTCHA_PARAMETERS={'hl': 'en-GB'},
 
     SECRET_KEY="$poptraq#",
     SECURITY_PASSWORD_SALT="@tre3potraq#",
@@ -41,7 +43,10 @@ app.config.update(dict(
 recaptcha = ReCaptcha()
 recaptcha.init_app(app)
 
-Bootstrap(app)
+login = LoginManager(app)
+login.login_view = 'user.login'
+
+bootstrap = Bootstrap(app)
 
 Debug(app)
 
@@ -52,6 +57,8 @@ db = SQLAlchemy(app)
 from poptraq.models import User, County
 from poptraq import views
 from poptraq.user import views
+from poptraq.errors import views
+from poptraq.admin import views
 
 manager = Manager(app)
 manager.add_command('db', MigrateCommand)
