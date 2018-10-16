@@ -6,50 +6,68 @@
 
 {% block nav %}
     <ul class="nav navbar-nav navbar-right">
-        <li><p class="navbar-text">{{ message }}</p></li>
-      <li><a href="{{ url_for('user.logout')}}"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+        <li><a href="{{ url_for('user.register')}}"><span class="glyphicon glyphicon-user"></span> Register</a></li>
+        <li><a href="{{ url_for('user.login')}}"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
     </ul>
 <script src='https://www.google.com/recaptcha/api.js'></script>
 {% endblock %}
 
 {% block content %}
-    {% if reset %}
-        <div class="alert alert-danger alert-dismissible text-center">
-            A reset link has been sent to: <strong>{{ email }}</strong>
-            <a href="" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-        </div>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          <!-- Categories: success (green), info (blue), warning (yellow), danger (red) -->
+          {% if messages %}
+            {% for category, message in messages %}
+              <div class="alert alert-{{ category }} alert-dismissible text-center" role="alert">
+                  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                  </button>
+                  <!-- <strong>Title</strong> --> {{ message }}
+              </div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
 
-    <div class="container">
-        <br/>
-        <h2>Confirm Credentials user credentials to reset password</h2>
-
-        <form class="form-horizontal col-sm-8" method="POST" action="{{ url_for('user.recover')}}">
-            <dl>
-                {{ form.csrf_token }}
-                {{ wtf.form_field(form.national_id) }}
-                {{ wtf.form_field(form.email) }}
-                <div class="g-recaptcha" data-sitekey="6LfgSHMUAAAAAPCT_9i_stHIR_AxowHyHvF-oD0z"></div>
-            </dl>
-            <input class="btn btn-success" type="submit" value="Submit"/>
-        </form>
-    </div>
-    {% endif %}
-
-    {% if new %}
         <div class="container">
-        <br/>
-        <h2>New Password</h2>
-            <form class="form-horizontal col-sm-8" method="POST" action="{{ url_for('user.recover')}}">
-                <dl>
-                    {{ form.csrf_token }}
-                    {{ wtf.form_field(form.national_id) }}
-                    {{ wtf.form_field(form.email) }}
-                    {{ wtf.form_field(form.password) }}
-                    {{ wtf.form_field(form.confirm_password) }}
-                    <div class="g-recaptcha" data-sitekey="6LfgSHMUAAAAAPCT_9i_stHIR_AxowHyHvF-oD0z"></div>
-                </dl>
-                <input class="btn btn-success" type="submit" value="Submit"/>
-            </form>
+
+        {% if reset %}
+            <div class="container">
+                <br/>
+                <h2>Confirm Credentials user credentials to reset password</h2>
+                <form class="form-horizontal col-sm-8" method="POST" action="{{ url_for('user.recover')}}">
+                    <dl>
+                        {{ form.csrf_token }}
+                        {{ wtf.form_field(form.email) }}
+                        {{ wtf.form_field(form.recaptcha) }}
+                    </dl>
+                    <input class="btn btn-success" type="submit" value="Submit"/>
+                </form>
+            </div>
+        {% endif %}
+
+        {% if new %}
+            <div class="container">
+                <br/>
+                <h2>Set New Password</h2>
+                <form class="form-horizontal col-sm-8" method="POST" action="{{ url_for('user.password_reset')}}">
+                    <dl>
+                        {{ form.csrf_token }}
+                        {{ wtf.form_field(form.password) }}
+                        {{ wtf.form_field(form.confirm_password) }}
+                        {{ wtf.form_field(form.recaptcha) }}
+                    </dl>
+                    <input class="btn btn-success" type="submit" value="Submit"/>
+                </form>
+            </div>
+        {% endif %}
+
+        {% if show %}
+            <div class="container">
+                <p>Dear user, a password reset link has been sent to your account. Please check your inbox (and your spam folder) -
+                you should have received an email with a password link.</p>
+                <br/><br/>
+                <p>Didn't get the email? <a href="{{ url_for('user.recover') }}"><strong>Try again</strong></a>?</p>
+            </div>
+        {% endif %}
+
         </div>
-    {% endif %}
 {% endblock %}
