@@ -57,6 +57,7 @@ setup(
         'python-dotenv',
         'python-editor',
         'pytz',
+        'raven',
         'requests',
         'six',
         'speaklater',
