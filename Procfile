@@ -1,1 +1,1 @@
-web: manage.py db upgrade; gunicorn run:app --log-file -
+web: gunicorn run:app --log-file -
