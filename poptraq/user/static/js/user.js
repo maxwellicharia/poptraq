@@ -4,5 +4,5 @@ $(".slide").fadeTo(2000, 500).slideUp(2000,
     });
 
 $(function(){
-    $('.datepicker').datepicker()
+    $('.datepicker').datepicker();
     });
