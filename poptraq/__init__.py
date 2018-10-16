@@ -37,8 +37,8 @@ app.config.update(
 
     SECRET_KEY="$poptraq#",
     SECURITY_PASSWORD_SALT="@tre3potraq#",
-    SQLALCHEMY_DATABASE_URI="postgres://baulihhkbdzhsm:5f2e8c560745b759e216f46be25e00edbc78b093a70f4b60d09d1a6e96be3a46"
-                            "@ec2-54-243-147-162.compute-1.amazonaws.com:5432/d6n676v5040vq1",
+    SQLALCHEMY_DATABASE_URI="postgres://unjltzspnbvjzb:e511c61dacd775cffc0857dde01511955532ef8b08c88c897b0d21b874f94848"
+                            "@ec2-54-221-251-195.compute-1.amazonaws.com:5432/d1lqqk8qoqodln",
     SQLALCHEMY_TRACK_MODIFICATIONS=False,
     BCRYPT_LOG_ROUNDS=13,
     WTF_CSRF_ENABLED=True
