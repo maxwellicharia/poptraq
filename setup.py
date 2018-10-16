@@ -59,6 +59,7 @@ setup(
         'pytz',
         'raven',
         'requests',
+        'sentry-sdk',
         'six',
         'speaklater',
         'SQLAlchemy',
