@@ -31,14 +31,16 @@
     <h2>Login</h2>
 
     <form class="form-horizontal col-sm-8" method="POST" action="{{ url_for('user.login')}}">
-        <dl>
             {{ form.csrf_token }}
             {{ wtf.form_field(form.national_id) }}
             {{ wtf.form_field(form.email) }}
             {{ wtf.form_field(form.password) }}
             {{ wtf.form_field(form.recaptcha) }}
             {{ wtf.form_field(form.remember_me) }}
-        </dl>
+            <br/>
+            <a href="{{ url_for('user.recover') }}" style="color: blue">Forgot Password?</a>
+            <br/>
+            <br/>
         <input class="btn btn-success" type="submit" value="Submit"/>
     </form>
 </div>

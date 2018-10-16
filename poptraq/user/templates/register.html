@@ -31,19 +31,17 @@
     <h2>Signup</h2>
 
     <form class="form-horizontal col-sm-8" method="POST" action="{{ url_for('user.register')}}">
-        <dl>
             {{ form.csrf_token }}
             {{ wtf.form_field(form.national_id) }}
             {{ wtf.form_field(form.first_name) }}
             {{ wtf.form_field(form.surname) }}
-            {{ wtf.form_field(form.dob) }}
+            {{ wtf.form_field(form.dob, class_='datepicker') }}
             {{ wtf.form_field(form.email) }}
             {{ wtf.form_field(form.home_county) }}
             {{ wtf.form_field(form.password) }}
             {{ wtf.form_field(form.confirm_password) }}
             {{ wtf.form_field(form.recaptcha) }}
             {{ wtf.form_field(form.remember_me) }}
-        </dl>
         <input class="btn btn-success" type="submit" value="Submit"/>
     </form>
 </div>
