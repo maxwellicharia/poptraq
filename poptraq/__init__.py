@@ -6,6 +6,15 @@ from flask_bootstrap import Bootstrap
 from flask_debug import Debug
 from flask_mail import Mail
 from flask_recaptcha import ReCaptcha
+import sentry_sdk
+from sentry_sdk.integrations.flask import FlaskIntegration
+
+sentry_sdk.init(
+    dsn="https://9893fa47a103437785f3f1bb07f81835@sentry.io/1302450",
+    integrations=[FlaskIntegration()],
+    max_breadcrumbs=50,
+    debug=True
+)
 
 app = Flask(__name__)
 app.config.update(
@@ -57,7 +66,6 @@ db = SQLAlchemy(app)
 from poptraq.models import User, County
 from poptraq import views
 from poptraq.user import views
-from poptraq.errors import views
 from poptraq.admin import views
 
 manager = Manager(app)
