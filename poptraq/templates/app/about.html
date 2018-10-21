@@ -1,40 +1,58 @@
-{% extends "layout.html" %}
+{% extends "app/layout.html" %}
 
 {% block title %} About {% endblock %}
 
 {% block nav %}
-    {% if current_user.is_authenticated %}
-        {% if current_user.confirmed %}
-            <ul class="nav navbar-nav navbar-right">
-                <p class="navbar-text">{{ current_user.email }}</p>
-                <li><a href="{{ url_for('user.account')}}"><span class="glyphicon glyphicon-home"></span> Home</a></li>
-                <li><a href="{{ url_for('user.logout')}}"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
-            </ul>
-        {% else %}
-            <ul class="nav navbar-nav navbar-right">
-                <p class="navbar-text">{{ current_user.email }}</p>
-                <li><a href="{{ url_for('user.unconfirmed')}}"><span class="glyphicon glyphicon-home"></span> Home</a></li>
-                <li><a href="{{ url_for('user.logout')}}"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
-            </ul>
-        {% endif %}
-    {% else %}
-        <ul class="nav navbar-nav navbar-right">
-            <li><a href="{{ url_for('user.register')}}"><span class="glyphicon glyphicon-user"></span> Register</a></li>
-            <li><a href="{{ url_for('user.login')}}"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
-        </ul>
-    {% endif %}
+{% if current_user.is_authenticated %}
+{% if current_user.confirmed %}
+{% if current_user.user and current_user.admin %}
+<ul class="nav navbar-nav navbar-right">
+    <p class="navbar-text">{{ current_user.email }}</p>
+    <li><a href="{{ url_for('admin.home')}}"><span class="glyphicon glyphicon-padlock"></span> Admin Home</a></li>
+    <li><a href="{{ url_for('user.account')}}"><span class="glyphicon glyphicon-home"></span> User Home</a></li>
+    <li><a href="{{ url_for('user.logout')}}"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+</ul>
+{% elif current_user.user%}
+<ul class="nav navbar-nav navbar-right">
+    <p class="navbar-text">{{ current_user.email }}</p>
+    <li><a href="{{ url_for('user.account')}}"><span class="glyphicon glyphicon-home"></span> Home</a></li>
+    <li><a href="{{ url_for('user.logout')}}"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+</ul>
+{% else %}
+<ul class="nav navbar-nav navbar-right">
+    <p class="navbar-text">{{ current_user.email }}</p>
+    <li><a href="{{ url_for('admin.home')}}"><span class="glyphicon glyphicon-padlock"></span> Home</a></li>
+    <li><a href="{{ url_for('admin.logout')}}"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+</ul>
+{% endif %}
+{% else %}
+{% if current_user.user %}
+<ul class="nav navbar-nav navbar-right">
+    <p class="navbar-text">{{ current_user.email }}</p>
+    <li><a href="{{ url_for('user.unconfirmed')}}"><span class="glyphicon glyphicon-home"></span> Home</a></li>
+    <li><a href="{{ url_for('user.logout')}}"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+</ul>
+{% endif %}
+{% endif %}
+{% else %}
+<ul class="nav navbar-nav navbar-right">
+    <p class="navbar-text">{{ current_user.email }}</p>
+    <li><a href="{{ url_for('login')}}"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+    <li><a href="{{ url_for('user.register')}}"><span class="glyphicon glyphicon-user"></span> Register</a></li>
+</ul>
+{% endif %}
 {% endblock %}
 
 {% block content %}
-    {% if email %}
-        <div class="alert alert-info alert-dismissible text-center">
-            Already logged in as: <strong>{{ email }}. </strong>
-            <a href="{{ url_for('user.account')}}" class="alert-link" style="color:green;"> Proceed</a>
-            or
-            <a href="{{ url_for('user.logout')}}" class="alert-link" style="color:red;"> Logout</a>
-            <a href="" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-        </div>
-    {% endif %}
+{% if email %}
+<div class="alert alert-info alert-dismissible text-center">
+    Already logged in as: <strong>{{ email }}. </strong>
+    <a href="{{ url_for('user.account')}}" class="alert-link" style="color:green;"> Proceed</a>
+    or
+    <a href="{{ url_for('user.logout')}}" class="alert-link" style="color:red;"> Logout</a>
+    <a href="" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+</div>
+{% endif %}
 
-    {{ content }}
+{{ content }}
 {% endblock %}

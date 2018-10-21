@@ -1,62 +1,56 @@
-{% extends "layout.html" %}
+{% extends "app/layout.html" %}
 
 {% block title %} Poptraq {% endblock title %}
 
 {% block nav %}
-    {% if current_user.is_authenticated %}
-        {% if current_user.confirmed %}
-            <ul class="nav navbar-nav navbar-right">
-                <p class="navbar-text">{{ current_user.email }}</p>
-                <li><a href="{{ url_for('user.account')}}"><span class="glyphicon glyphicon-home"></span> Home</a></li>
-                <li><a href="{{ url_for('user.logout')}}"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
-            </ul>
-        {% else %}
-            <ul class="nav navbar-nav navbar-right">
-                <p class="navbar-text">{{ current_user.email }}</p>
-                <li><a href="{{ url_for('user.unconfirmed')}}"><span class="glyphicon glyphicon-home"></span> Home</a></li>
-                <li><a href="{{ url_for('user.logout')}}"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
-            </ul>
-        {% endif %}
-    {% else %}
-        <ul class="nav navbar-nav navbar-right">
-            <li><a href="{{ url_for('user.register')}}"><span class="glyphicon glyphicon-user"></span> Register</a></li>
-            <li>
-                <div class="popup" onclick="myFunction()">
-                    <a href="#"><span class="glyphicon glyphicon-log-in"></span> Login</a>
-                  <span class="popuptext" id="myPopup">
-                      <a href="{{ url_for('user.login')}}" class="btn btn-success" role="button">User</a>
-                      <a href="{{ url_for('admin.login')}}" class="btn btn-primary" role="button">Admin</a>
-                  </span>
-                </div>
-            </li>
-            <li></li>
-        </ul>
-    {% endif %}
+{% if current_user.is_authenticated %}
+{% if current_user.confirmed %}
+{% if current_user.user and current_user.admin %}
+<ul class="nav navbar-nav navbar-right">
+    <p class="navbar-text">{{ current_user.email }}</p>
+    <li><a href="{{ url_for('admin.home')}}"><span class="glyphicon glyphicon-padlock"></span> Admin Home</a></li>
+    <li><a href="{{ url_for('user.account')}}"><span class="glyphicon glyphicon-home"></span> User Home</a></li>
+    <li><a href="{{ url_for('user.logout')}}"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+</ul>
+{% elif current_user.user%}
+<ul class="nav navbar-nav navbar-right">
+    <p class="navbar-text">{{ current_user.email }}</p>
+    <li><a href="{{ url_for('user.account')}}"><span class="glyphicon glyphicon-home"></span> Home</a></li>
+    <li><a href="{{ url_for('user.logout')}}"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+</ul>
+{% else %}
+<ul class="nav navbar-nav navbar-right">
+    <p class="navbar-text">{{ current_user.email }}</p>
+    <li><a href="{{ url_for('admin.home')}}"><span class="glyphicon glyphicon-padlock"></span> Home</a></li>
+    <li><a href="{{ url_for('admin.logout')}}"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+</ul>
+{% endif %}
+{% else %}
+{% if current_user.user %}
+<ul class="nav navbar-nav navbar-right">
+    <p class="navbar-text">{{ current_user.email }}</p>
+    <li><a href="{{ url_for('user.unconfirmed')}}"><span class="glyphicon glyphicon-home"></span> Home</a></li>
+    <li><a href="{{ url_for('user.logout')}}"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+</ul>
+{% endif %}
+{% endif %}
+{% else %}
+<ul class="nav navbar-nav navbar-right">
+    <p class="navbar-text">{{ current_user.email }}</p>
+    <li><a href="{{ url_for('login')}}"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+    <li><a href="{{ url_for('user.register')}}"><span class="glyphicon glyphicon-user"></span> Register</a></li>
+</ul>
+{% endif %}
 {% endblock %}
 
 {% block content %}
-    <div style="text-align: center;">
-        {% with messages = get_flashed_messages(with_categories=true) %}
-          <!-- Categories: success (green), info (blue), warning (yellow), danger (red) -->
-          {% if messages %}
-            {% for category, message in messages %}
-              <div class="alert alert-{{ category }} alert-dismissible text-center" role="alert" style="text-align: center;">
-                  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                      <span aria-hidden="true">&times;</span>
-                  </button>
-                  <!-- <strong>Title</strong> --> {{ message }}
-              </div>
-            {% endfor %}
-          {% endif %}
-        {% endwith %}
-    </div>
 
-    <div class="container">
-        <center>
-            <h1>Poptraq - Population Analyser</h1>
-            <h2>Current Statistics Data</h2>
-        </center>
-    </div>
+<div class="container">
+    <center>
+        <h1>Poptraq - Population Analyser</h1>
+        <h2>Current Statistics Data</h2>
+    </center>
+</div>
 <br>
 <div id="results">
     <table class="table table-hover table-striped table-responsive">

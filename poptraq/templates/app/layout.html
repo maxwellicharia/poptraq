@@ -15,59 +15,65 @@
     <!--favicon.ico img-->
     <link rel="shortcut icon" type="image/x-icon" href="{{ url_for('static', filename='img/favicon.ico') }}">
 
-    <!--JQuery CDN-->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-
-    <!--Bootstrap JS-->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-
     <!-- Bootstrap CSS-->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 
     <!--App CSS-->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
 
+    <!--JQuery CDN-->
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+    <!--Bootstrap JS-->
+    <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <!--App JS-->
+    <script type="text/javascript" src="{{ url_for('static', filename='js/app.js') }}"></script>
+
 </head>
 
 <body>
-    <nav class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container-fluid">
-            <div class="navbar-header">
-              <a class="navbar-brand" href="{{ url_for('index')}}">Poptraq</a>
-            </div>
-            <ul class="nav navbar-nav">
-              <li><a href="{{ url_for('about')}}">About</a></li>
-            </ul>
-
-            <form class="navbar-form navbar-left" action="">
-              <div class="input-group">
-                <input type="text" class="form-control" placeholder="Search">
-                <div class="input-group-btn">
-                  <button class="btn btn-success" type="submit">
-                    <i class="glyphicon glyphicon-search"></i>
-                  </button>
-                </div>
-              </div>
-            </form>
-
-            {% block nav %}
-            <ul class="nav navbar-nav navbar-right">
-              <li><a href="{{ url_for('user.register')}}"><span class="glyphicon glyphicon-user"></span> Register</a></li>
-              <li><a href="{{ url_for('user.login')}}"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
-            </ul>
-            {% endblock %}
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="{{ url_for('index')}}">Poptraq</a>
         </div>
-    </nav>
-    <br/>
-    <br/>
+        <ul class="nav navbar-nav">
+            <li><a href="{{ url_for('about')}}">About</a></li>
+        </ul>
+
+        {% block nav %}
+        <ul class="nav navbar-nav navbar-right">
+            <li><a href="{{ url_for('user.register')}}"><span class="glyphicon glyphicon-user"></span> Register</a></li>
+            <li><a href="{{ url_for('login')}}"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+        </ul>
+        {% endblock %}
+    </div>
+</nav>
+<br/>
+<br/>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+<!-- Categories: success (green), info (blue), warning (yellow), danger (red) -->
+{% if messages %}
+{% for category, message in messages %}
+<div class="alert alert-{{ category }} alert-dismissible text-center" role="alert">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+    <!-- <strong>Title</strong> --> {{ message }}
+</div>
+{% endfor %}
+{% endif %}
+{% endwith %}
 
 {% block content %}
-    <div class="container">
-        <center>
-            <h1>Poptraq - Population Analyser</h1>
-            <h2>Current Statistics Data</h2>
-        </center>
-    </div>
+<div class="container">
+    <center>
+        <h1>Poptraq - Population Analyser</h1>
+        <h2>Current Statistics Data</h2>
+    </center>
+</div>
 <br>
 <div id="results">
     <table class="table table-hover table-striped table-responsive">
@@ -98,7 +104,16 @@
 </div>
 
 {% endblock %}
-    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+
+<script type="text/javascript">
+        function myFunction() {
+            var popup = document.getElementById("myPopup");
+            popup.classList.toggle("show");
+        }
+
+
+</script>
+
 </body>
 
 </html>
