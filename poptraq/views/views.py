@@ -24,45 +24,47 @@ def login():
     form = LoginForm(request.form)
     if form.validate_on_submit():
         user = User.query.filter_by(national_id=form.national_id.data, email=form.email.data).first()
-        if user and check_password_hash(user.password, form.password.data) and user.admin and user.user:
-            login_user(user, remember=form.remember_me.data)
+        if user and check_password_hash(user.password, form.password.data):
+            if user.status == 'Active':
+                if user.admin and user.user:
+                    login_user(user, remember=form.remember_me.data)
 
-            d = datetime.now()
-            timezone = pytz.timezone("Africa/Nairobi")
-            d_aware = timezone.localize(d)
+                    d = datetime.now()
+                    timezone = pytz.timezone("Africa/Nairobi")
+                    d_aware = timezone.localize(d)
 
-            user.last_seen = d_aware.strftime("%B %d, %Y | %H:%M:%S")
-            db.session.add(user)
-            db.session.commit()
+                    user.last_seen = d_aware.strftime("%B %d, %Y %H:%M:%S")
+                    db.session.add(user)
+                    db.session.commit()
 
-            flash('Successful Login SuperAdmin: ' + current_user.email, category='success')
-            return redirect(url_for('admin.home'))
-        elif user and check_password_hash(user.password, form.password.data) and user.admin:
-            login_user(user, remember=form.remember_me.data)
+                    flash('Successful Login SuperAdmin: ' + current_user.email, category='success')
+                    return redirect(url_for('admin.home'))
+                elif user.admin:
+                    login_user(user, remember=form.remember_me.data)
 
-            d = datetime.now()
-            timezone = pytz.timezone("Africa/Nairobi")
-            d_aware = timezone.localize(d)
+                    d = datetime.now()
+                    timezone = pytz.timezone("Africa/Nairobi")
+                    d_aware = timezone.localize(d)
 
-            user.last_seen = d_aware.strftime("%B %d, %Y | %H:%M:%S")
-            db.session.add(user)
-            db.session.commit()
+                    user.last_seen = d_aware.strftime("%B %d, %Y %H:%M:%S")
+                    db.session.add(user)
+                    db.session.commit()
 
-            flash('Successful Login Admin: ' + current_user.email, category='success')
-            return redirect(url_for('admin.home'))
-        elif user and check_password_hash(user.password, form.password.data) and user.user:
-            login_user(user, remember=form.remember_me.data)
+                    flash('Successful Login Admin: ' + current_user.email, category='success')
+                    return redirect(url_for('admin.home'))
+                elif user.user:
+                    login_user(user, remember=form.remember_me.data)
 
-            d = datetime.now()
-            timezone = pytz.timezone("Africa/Nairobi")
-            d_aware = timezone.localize(d)
+                    d = datetime.now()
+                    timezone = pytz.timezone("Africa/Nairobi")
+                    d_aware = timezone.localize(d)
 
-            user.last_seen = d_aware.strftime("%B %d, %Y | %H:%M:%S")
-            db.session.add(user)
-            db.session.commit()
+                    user.last_seen = d_aware.strftime("%B %d, %Y %H:%M:%S")
+                    db.session.add(user)
+                    db.session.commit()
 
-            flash('Successful Login User: ' + current_user.email, category='success')
-            return redirect(url_for('user.account'))
+                    flash('Successful Login User: ' + current_user.email, category='success')
+                    return redirect(url_for('user.account'))
         flash('Invalid log in credentials, register?', category='danger')
         return redirect(url_for('login'))
     return render_template('app/login.html', form=form)
