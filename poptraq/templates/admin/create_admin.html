@@ -1,0 +1,71 @@
+{% extends "admin/layout.html" %}
+
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %} Create Admin {% endblock %}
+
+{% block nav %}
+{% if current_user.is_authenticated %}
+{% if current_user.user and current_user.admin %}
+<ul class="nav navbar-nav navbar-left">
+    <li><a href="{{ url_for('user.account')}}"><span class="glyphicon glyphicon-refresh"></span> Switch</a></li>
+</ul>
+{% endif %}
+<ul class="nav navbar-nav navbar-right">
+    <li><a href="{{ url_for('admin.home')}}"><span class="glyphicon glyphicon-dashboard"></span> Dashboard</a></li>
+    <li><a href="{{ url_for('admin.access_admin')}}"><span class="glyphicon glyphicon-cog"></span> Add Admin Access
+        Rights</a></li>
+    <p class="navbar-text"><strong>Admin Account: </strong>{{ current_user.email }}</p>
+    <li><a href="{{ url_for('admin.logout')}}"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+</ul>
+{% else %}
+<ul>
+    <li><a href="{{ url_for('user.register')}}"><span class="glyphicon glyphicon-user"></span> Register</a></li>
+    <li><a href="{{ url_for('login')}}"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+</ul>
+<script src='https://www.google.com/recaptcha/api.js'></script>
+{% endif %}
+{% endblock %}
+
+{% block content %}
+<div class="container">
+
+    {% if show %}
+    <div class="container">
+        <br/>
+        <h2>Input Email Address to Send Admin Account Creation Link</h2>
+        <form class="form-horizontal col-sm-8" method="POST" action="{{ url_for('admin.add_admin')}}">
+            <dl>
+                {{ form.csrf_token }}
+                {{ wtf.form_field(form.email) }}
+                {{ wtf.form_field(form.recaptcha) }}
+            </dl>
+            <input class="btn btn-success" type="submit" value="Submit"/>
+        </form>
+    </div>
+    {% endif %}
+
+    {% if new %}
+    <div class="container">
+        <br/>
+        <h2>Create Admin Account</h2>
+
+        <form class="form-horizontal col-sm-8" method="POST" action="{{ url_for('admin.register')}}">
+            {{ form.csrf_token }}
+            {{ wtf.form_field(form.national_id) }}
+            {{ wtf.form_field(form.first_name) }}
+            {{ wtf.form_field(form.surname) }}
+            {{ wtf.form_field(form.dob, class_='datepicker') }}
+            {{ wtf.form_field(form.email) }}
+            {{ wtf.form_field(form.home_county) }}
+            {{ wtf.form_field(form.password) }}
+            {{ wtf.form_field(form.confirm_password) }}
+            {{ wtf.form_field(form.recaptcha) }}
+            {{ wtf.form_field(form.remember_me) }}
+            <input class="btn btn-success" type="submit" value="Submit"/>
+        </form>
+    </div>
+    {% endif %}
+
+</div>
+{% endblock %}

@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Potraq Report</title>
+
+    <link rel="stylesheet" href="/static/css/report.css">
+
+</head>
+<body>
+<div class="pad">
+    {% block nav %}
+    {% endblock %}
+
+    {% block content %}
+
+    <p style="color:grey;" class="alignright">{{ date }}</p>
+
+    <div style="clear: both;"></div>
+
+    <img class="alignleft" src="/static/img/favicon.ico" alt="Logo">
+    <h2 style="color: grey;" class="alignright">Population Analyser - Potraq | Report</h2>
+
+    <div style="clear: both;"></div>
+
+    <br>
+    {% if results %}
+    <h2 style="color: orange;">System</h2>
+    <div>
+        <table>
+            <caption style="color: brown;">System Users</caption>
+            <thead>
+            <tr>
+                <th scope="col">National ID</th>
+                <th scope="col">Email Address</th>
+                <th scope="col">First Name</th>
+                <th scope="col">Surname</th>
+            </tr>
+            </thead>
+
+            {% for result in results%}
+            <tr>
+                <td>{{ result.national_id }}</td>
+                <td>{{ result.email }}</td>
+                <td>{{ result.first_name }}</td>
+                <td>{{ result.surname }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+    <br>
+    <br>
+    <div>
+        <table>
+            <caption style="color: brown;">System Accounts</caption>
+            <thead>
+            <tr>
+                <th scope="col">National ID</th>
+                <th scope="col">Email Address</th>
+                <th scope="col">User Rights</th>
+                <th scope="col">Admin Rights</th>
+                <th scope="col">Account Status</th>
+            </tr>
+            </thead>
+
+            {% for result in results%}
+            <tr>
+                <td>{{ result.national_id }}</td>
+                <td>{{ result.email }}</td>
+                <td>{{ result.user }}</td>
+                <td>{{ result.admin }}</td>
+                <td>{{ result.status }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+    <br>
+    <br>
+    <div>
+        <table>
+            <caption style="color: brown;">System Logs</caption>
+            <thead>
+            <tr>
+                <th scope="col">National ID</th>
+                <th scope="col">Last Seen</th>
+                <th scope="col">Last Updated</th>
+                <th scope="col">Confirmation Status</th>
+                <th scope="col">Account Status</th>
+            </tr>
+            </thead>
+
+            {% for result in results%}
+            <tr>
+                <td>{{ result.national_id }}</td>
+                <td>{{ result.last_seen }}</td>
+                <td>{{ result.updated }}</td>
+                <td>{{ result.confirmed }}</td>
+                <td>{{ result.status }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+    {% endif %}
+    {% endblock %}
+</div>
+</body>
+</html>

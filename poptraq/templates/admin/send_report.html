@@ -1,0 +1,36 @@
+{% extends "admin/layout.html" %}
+
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %} Admin {% endblock title %}
+
+{% block nav %}
+{% if current_user.user and current_user.admin %}
+    <ul class="nav navbar-nav navbar-left">
+        <li><a href="{{ url_for('user.account')}}"><span class="glyphicon glyphicon-refresh"></span> Switch</a></li>
+    </ul>
+{% endif %}
+<ul class="nav navbar-nav navbar-right">
+    <li><a href="{{ url_for('admin.home')}}"><span class="glyphicon glyphicon-dashboard"></span> Dashboard</a></li>
+    <li><a href="{{ url_for('admin.report_dash')}}"><span class="glyphicon glyphicon-arrow-left"></span> Back</a></li>
+    <p class="navbar-text"><strong>Admin Account: </strong>{{ current_user.email }}</p>
+    <li><a href="{{ url_for('admin.logout')}}"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+</ul>
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+        <br/>
+        <h2>Input Email Address to Send Report</h2>
+        <form class="form-horizontal col-sm-8" method="POST" action="{{ url_for('admin.send_report')}}">
+            <dl>
+                {{ form.csrf_token }}
+                {{ wtf.form_field(form.email) }}
+                {{ wtf.form_field(form.recaptcha) }}
+            </dl>
+            <input class="btn btn-primary" type="submit" value="Send"/>
+        </form>
+    </div>
+
+{% endblock %}
