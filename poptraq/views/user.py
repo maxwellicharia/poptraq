@@ -13,7 +13,7 @@ from poptraq.form import RegistrationForm, EmailForm, PasswordForm
 from poptraq.models import User
 from poptraq.token import generate_confirmation_token, confirm_token
 
-user = Blueprint('user', __name__, url_prefix='/user', static_folder='static', template_folder='templates')
+user = Blueprint('user', __name__, url_prefix='/user')
 
 
 @user.route('/', methods=['GET'])
@@ -84,9 +84,9 @@ def confirm_email(token):
         timezone = pytz.timezone("Africa/Nairobi")
         d_aware = timezone.localize(d)
 
-        new_user.updated = d_aware.strftime("%B %d, %Y | %H:%M:%S")
+        new_user.updated = d_aware.strftime("%B %d, %Y %H:%M:%S")
         new_user.confirmed = True
-        new_user.confirmed_on = d_aware.strftime("%B %d, %Y | %H:%M:%S")
+        new_user.confirmed_on = d_aware.strftime("%B %d, %Y %H:%M:%S")
         db.session.add(new_user)
         db.session.commit()
         flash('Successfully Confirmed your Account', category='success')
@@ -145,7 +145,7 @@ def password_reset():
                 timezone = pytz.timezone("Africa/Nairobi")
                 d_aware = timezone.localize(d)
 
-                new_user.updated = d_aware.strftime("%B %d, %Y | %H:%M:%S")
+                new_user.updated = d_aware.strftime("%B %d, %Y %H:%M:%S")
                 new_user.password = generate_password_hash(form.password.data,
                                                            method='pbkdf2:sha256', salt_length=8)
                 db.session.add(new_user)
