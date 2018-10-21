@@ -37,8 +37,9 @@ app.config.update(
 
     SECRET_KEY="$poptraq#",
     SECURITY_PASSWORD_SALT="@tre3potraq#",
-    SQLALCHEMY_DATABASE_URI="postgres://unjltzspnbvjzb:e511c61dacd775cffc0857dde01511955532ef8b08c88c897b0d21b874f94848"
-                            "@ec2-54-221-251-195.compute-1.amazonaws.com:5432/d1lqqk8qoqodln",
+    # SQLALCHEMY_DATABASE_URI="postgres://unjltzspnbvjzb:e511c61dacd775cffc0857dde01511955532ef8b08c88c897b0d21b874f94848"
+    #                         "@ec2-54-221-251-195.compute-1.amazonaws.com:5432/d1lqqk8qoqodln",
+    SQLALCHEMY_DATABASE_URI="postgresql://postgres:postgres@localhost:5432/potraq",
     SQLALCHEMY_TRACK_MODIFICATIONS=False,
     BCRYPT_LOG_ROUNDS=13,
     WTF_CSRF_ENABLED=True
@@ -53,8 +54,11 @@ app.config.update(dict(
 recaptcha = ReCaptcha()
 recaptcha.init_app(app)
 
-login = LoginManager(app)
-login.login_view = 'user.login'
+login_manager = LoginManager(app)
+login_manager.init_app(app)
+login_manager.login_view = 'login'
+login_manager.login_message = u"Login required to gain access"
+login_manager.login_message_category = "info"
 
 bootstrap = Bootstrap(app)
 
@@ -66,8 +70,7 @@ db = SQLAlchemy(app)
 
 from poptraq.models import User, County
 from poptraq import views
-from poptraq.user import views
-from poptraq.admin import views
+from poptraq.views import admin, user, views
 
 manager = Manager(app)
 manager.add_command('db', MigrateCommand)
