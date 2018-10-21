@@ -135,3 +135,7 @@ class PasswordForm(FlaskForm):
     confirm_password = PasswordField("Repeat Password", [DataRequired(message="Confirm Password"),
                                                          EqualTo('password', message='Passwords must match')])
     recaptcha = RecaptchaField()
+
+
+class SearchForm(FlaskForm):
+    email = EmailField()
