@@ -20,7 +20,16 @@
     {% else %}
         <ul class="nav navbar-nav navbar-right">
             <li><a href="{{ url_for('user.register')}}"><span class="glyphicon glyphicon-user"></span> Register</a></li>
-            <li><a href="{{ url_for('user.login')}}"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+            <li>
+                <div class="popup" onclick="myFunction()">
+                    <a href="#"><span class="glyphicon glyphicon-log-in"></span> Login</a>
+                  <span class="popuptext" id="myPopup">
+                      <a href="{{ url_for('user.login')}}" class="btn btn-success" role="button">User</a>
+                      <a href="{{ url_for('admin.login')}}" class="btn btn-primary" role="button">Admin</a>
+                  </span>
+                </div>
+            </li>
+            <li></li>
         </ul>
     {% endif %}
 {% endblock %}
