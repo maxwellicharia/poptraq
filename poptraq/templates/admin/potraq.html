@@ -1,0 +1,60 @@
+{% extends "admin/layout.html" %}
+
+{% block title %} Admin {% endblock title %}
+
+{% block nav %}
+{% if current_user.user and current_user.admin %}
+    <ul class="nav navbar-nav navbar-left">
+        <li><a href="{{ url_for('user.account')}}"><span class="glyphicon glyphicon-refresh"></span> Switch</a></li>
+    </ul>
+{% endif %}
+<ul class="nav navbar-nav navbar-right">
+    <li><a href="{{ url_for('admin.home')}}"><span class="glyphicon glyphicon-dashboard"></span> Dashboard</a></li>
+    <li><a href="{{ url_for('sources')}}"><span class="glyphicon glyphicon-list-briefcase"></span> Sources</a></li>
+    <li><a href="{{ url_for('about')}}"><span class="glyphicon glyphicon-list-book"></span> About</a></li>
+    <p class="navbar-text"><strong>Admin Account: </strong>{{ current_user.email }}</p>
+    <li><a href="{{ url_for('admin.logout')}}"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+</ul>
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+    <center>
+        <h1>Population analyser</h1>
+        <h2>Admin View</h2>
+    </center>
+</div>
+<br>
+{% if results %}
+<div id="results" style="margin-left: 2cm; margin-right: 2cm; margin-bottom: 2cm;">
+    <table class="table table-hover table-striped table-responsive">
+        <thead>
+        <tr>
+            <th>County ID</th>
+            <th>County</th>
+            <th>Sectors</th>
+            <th>Population</th>
+            <th>Current Budget</th>
+            <th>ProposedBudget</th>
+            <th>Area (Km<sup>2</sup>)</th>
+            <th style="color: orange;">Edit</th>
+        </tr>
+        </thead>
+
+        {% for result in results %}
+        <tr>
+            <td>{{ result.id }}</td>
+            <td>{{ result.county_name }}</td>
+            <td>{{ result.sectors }}</td>
+            <td>{{ result.population }}</td>
+            <td>{{ result.current_budget }}</td>
+            <td>{{ result.proposed_budget }}</td>
+            <td>{{ result.size }}</td>
+            <td><a href="#" class="btn btn-primary">Edit</a></td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+{% endif %}
+{% endblock %}

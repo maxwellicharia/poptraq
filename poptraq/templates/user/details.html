@@ -1,0 +1,30 @@
+{% extends "user/layout.html" %}
+
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %} Details {% endblock %}
+
+{% block nav %}
+<ul class="nav navbar-nav navbar-right">
+    <li><a href="{{ url_for('user.account')}}"><span class="glyphicon glyphicon-arrow-left"></span> Back</a></li>
+    <p class="navbar-text"><strong>User Account:</strong> {{ current_user.email }}</p>
+    <li><a href="{{ url_for('user.logout')}}"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+</ul>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <br/>
+    <h2>Details</h2>
+
+    <form class="form-horizontal col-sm-8" method="POST" enctype="multipart/form-data" action="{{ url_for('user.details')}}">
+        {{ form.csrf_token }}
+        {{ wtf.form_field(form.passport_photo) }}
+        {{ wtf.form_field(form.age) }}
+        {{ wtf.form_field(form.gender) }}
+        {{ wtf.form_field(form.marital_status) }}
+        {{ wtf.form_field(form.specifics) }}
+        <input class="btn btn-success" type="submit" value="Submit"/>
+    </form>
+</div>
+{% endblock %}

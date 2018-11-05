@@ -6,24 +6,20 @@
 {% if current_user.user and current_user.admin %}
 <ul class="nav navbar-nav navbar-left">
     <li><a onclick="refresh"><span class="glyphicon glyphicon-refresh"></span> Switch</a></li>
-    <li><a href="{{ url_for('admin.population')}}"><span class="glyphicon glyphicon-new-window"></span> Poptraq</a></li>
 </ul>
 {% endif %}
 <ul class="nav navbar-nav navbar-right">
     <li><a href="{{ url_for('admin.home')}}"><span class="glyphicon glyphicon-dashboard"></span> Dashboard</a></li>
-    <li><a href="{{ url_for('admin.stats')}}"><span class="glyphicon glyphicon-left-arrow"></span> Back</a></li>
+    <li><a href="{{ url_for('admin.stats')}}"><span class="glyphicon glyphicon-arrow-left"></span> Back</a></li>
     <p class="navbar-text"><strong>Admin Account: </strong>{{ current_user.email }}</p>
     <li><a href="{{ url_for('admin.logout')}}"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
 </ul>
 {% endblock %}
 
 {% block content %}
-<button style="float: left; margin: 1.5cm" onclick="refresh" class="btn btn-primary btn-lg">
-    <span class="glyphicon glyphicon-refresh"></span> Refresh
-</button>
 <br>
 <br>
-<div style="margin: 2cm; align: center;" id="refresh">
+<div style="margin: 2cm; align: center;" id="refresh_chart">
     <center>
         <link href="http://cdn.pydata.org/bokeh/release/bokeh-0.13.0.min.css" rel="stylesheet">
         <link href="http://cdn.pydata.org/bokeh/release/bokeh-widgets-0.13.0.min.css" rel="stylesheet">
@@ -34,12 +30,4 @@
         {{ script|safe }}
     </center>
 </div>
-
-<script>
-    function refresh(){
-       $('#refresh').load('charts');
-    } /* time in milliseconds (ie 2 seconds)*/
-
-
-</script>
 {% endblock %}

@@ -1,54 +1,61 @@
 {% extends "admin/layout.html" %}
 
+{% import "bootstrap/wtf.html" as wtf %}
+
 {% block title %} Admin {% endblock title %}
 
 {% block nav %}
 {% if current_user.user and current_user.admin %}
     <ul class="nav navbar-nav navbar-left">
         <li><a href="{{ url_for('user.account')}}"><span class="glyphicon glyphicon-refresh"></span> Switch</a></li>
-        <li><a href="{{ url_for('admin.population')}}"><span class="glyphicon glyphicon-new-window"></span> Poptraq</a></li>
     </ul>
 {% endif %}
+
+<form class="navbar-form navbar-left" method="POST" action="{{ url_for('admin.search') }}">
+    <div class="input-group">
+        <div class="input-group-btn">
+            {{ form.csrf_token }}
+            {{ wtf.form_field(form.email, placeholder="Search email address...") }}
+            <button class="btn btn-primary" type="submit">
+                <i class="glyphicon glyphicon-search"></i>
+            </button>
+        </div>
+    </div>
+</form>
+
 <ul class="nav navbar-nav navbar-right">
-    <li><a href="{{ url_for('admin.add_admin')}}"><span class="glyphicon glyphicon-plus"></span> Add Admin</a></li>
-    <li><a href="{{ url_for('admin.report_dash')}}"><span class="glyphicon glyphicon-list-alt"></span> Reports</a></li>
-    <li><a href="{{ url_for('admin.statistics')}}"><span class="glyphicon glyphicon-stats"></span> Statistics</a></li>
-    <li><a href="{{ url_for('admin.notifications')}}"><span class="glyphicon glyphicon-bell"></span> Notifications <span class="badge">{{5}}</span></a></li>
-    <li><a href="{{ url_for('admin.settings')}}"><span class="glyphicon glyphicon-wrench"></span> Settings</a></li>
+    <li><a href="{{ url_for('admin.home')}}"><span class="glyphicon glyphicon-dashboard"></span> Dashboard</a></li>
     <p class="navbar-text"><strong>Admin Account: </strong>{{ current_user.email }}</p>
     <li><a href="{{ url_for('admin.logout')}}"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
 </ul>
 {% endblock %}
 
 {% block content %}
-
-<div class="container">
-    <center>
-        <h1>Admin - View</h1>
-        <h2>Submissions status</h2>
-    </center>
-</div>
-<br>
-<div class="container">
-    <center>
-        <h1>Admin - View</h1>
-        <h2>Access Rights</h2>
-    </center>
-</div>
-<br>
 {% if results %}
-<div id="results">
+<div class="container">
+    <center>
+        <h1>Admin - View</h1>
+        <h2>Logs | Manage accounts</h2>
+    </center>
+</div>
+<br>
+
+<div id="results" style="margin-left: 1cm; margin-right: 1cm; margin-bottom: 2cm;">
     <table class="table table-hover table-striped table-responsive">
         <thead>
         <tr>
             <th>National ID</th>
             <th>Email Address</th>
             <th>User Privileges</th>
-            <td style="color:green;">Grant User Rights</td>
-            <td style="color:red;">Revoke User Rights</td>
             <th>Admin Privileges</th>
-            <td style="color:blue;">Grant Admin Rights</td>
-            <td style="color:orange;">Revoke Admin Rights</td>
+            <th>Created On</th>
+            <th>Account Confirmed</th>
+            <th>Updated On</th>
+            <th>Last Seen</th>
+            <th>Status</th>
+            <th style="color: green;">Activate</th>
+            <th style="color: orange;">Suspend</th>
+            <th style="color: red;">Deactivate</th>
         </tr>
         </thead>
 
@@ -57,18 +64,30 @@
             <td>{{ result.national_id }}</td>
             <td>{{ result.email }}</td>
             <td>{{ result.user }}</td>
-            <td><a href="{{ url_for('admin.grant_user_rights', national_id=result.national_id) }}" type="button"
-                   class="btn btn-success">Grant User Rights</a></td>
-            <td><a href="{{ url_for('admin.revoke_user_rights', national_id=result.national_id) }}" type="button"
-                   class="btn btn-danger">Revoke User Rights</a></td>
             <td>{{ result.admin }}</td>
-            <td><a href="{{ url_for('admin.grant_admin_rights', national_id=result.national_id) }}" type="button"
-                   class="btn btn-primary">Grant Admin Rights</a></td>
-            <td><a href="{{ url_for('admin.revoke_admin_rights', national_id=result.national_id) }}" type="button"
-                   class="btn btn-warning">Revoke Admin Rights</a></td>
+            <td>{{ result.created }}</td>
+            <td>{{ result.confirmed }}</td>
+            <td>{{ result.updated }}</td>
+            <td>{{ result.last_seen }}</td>
+            <td>{{ result.status }}</td>
+            <td><a href="{{ url_for('admin.activate', national_id=result.national_id) }}" type="button"
+                   class="btn btn-success">Activate</a></td>
+            <td><a href="{{ url_for('admin.suspend', national_id=result.national_id) }}" type="button"
+                   class="btn btn-warning">Suspend</a></td>
+            <td><a href="{{ url_for('admin.deactivate', national_id=result.national_id) }}" type="button"
+                   class="btn btn-danger">Deactivate</a></td>
         </tr>
         {% endfor %}
     </table>
+</div>
+{% else %}
+<div class="container">
+    <center>
+        <h2 style="color: red;">Email not found</h2>
+        <br>
+        <br>
+        <a href="{{ url_for('admin.settings') }}" class="btn btn-primary"><span class="glyphicon glyphicon-refresh"></span>Refresh</a>
+    </center>
 </div>
 {% endif %}
 {% endblock %}

@@ -1,3 +1,5 @@
+# Administrator routes
+
 import random
 from datetime import datetime
 from io import BytesIO
@@ -5,46 +7,51 @@ from threading import Thread
 
 import pytz
 from bokeh.embed import components
-from bokeh.models import ColumnDataSource
+from bokeh.models import ColumnDataSource, BoxSelectTool
 from bokeh.plotting import figure
 from flask import Blueprint, render_template, redirect, url_for, flash, request
 from flask_login import login_required, logout_user, login_user
 from flask_mail import Message
 from flask_weasyprint import render_pdf
+from flask_socketio import send
 from sqlalchemy.exc import InternalError, ProgrammingError
 from werkzeug.security import generate_password_hash
 from xhtml2pdf import pisa
 
-from poptraq import app, db, mail
+from poptraq import app, db, mail, socketio
 from poptraq.decorators import admin_user, anonymous
 from poptraq.email import send_email
-from poptraq.form import EmailForm, RegistrationForm, SearchForm
-from poptraq.models import User
+from poptraq.form import EmailForm, RegistrationForm, SearchForm, CountyForm
+from poptraq.models import User, County
 from poptraq.token import generate_confirmation_token, confirm_token
 
 admin = Blueprint('admin', __name__, url_prefix='/admin')
 
 
-@admin.route('/', methods=['GET'])
-@login_required
-@admin_user
+@admin.route('/', methods=['GET'])  # admin home, restricting methods to only GET, no POST
+@login_required  # Flask-Login decorator to restrict login access
+@admin_user  # custom decorator found in decorators.py that only allows admins
 def home():
+    """Main Home function for the administrator"""
     return render_template('admin/account.html')
 
 
-@admin.route('/population', methods=['GET'])
+@admin.route('/potraq', methods=['GET'])
 @login_required
 @admin_user
-def population():
-    pass
+def potraq():
+    """Table view for every county by every user"""
+    results = County.query.order_by(County.id)  # database query function
+    return render_template('admin/potraq.html', results=results)  # rendering query results to the html view
 
 
 @admin.route('/access_admin', methods=['GET'])
 @login_required
 @admin_user
 def access_admin():
+    """"""
     form = SearchForm()
-    results = User.query.filter_by(status='Active').all()
+    results = User.query.filter_by(status='Active').order_by(User.national_id)
     return render_template('admin/access_admin.html', results=results, form=form)
 
 
@@ -55,12 +62,12 @@ def search():
     form = SearchForm()
     if form.validate_on_submit():
         email = request.form['email']
-        results = User.query.filter_by(email=email, status='Active').all()
+        results = User.query.filter_by(email=email, status='Active').order_by(User.national_id)
         if not results:
             flash('Admin not Found', category='danger')
             return redirect(url_for('admin.access_admin'))
         flash('Found!', category='success')
-        return render_template('admin/access_admin.html', search=results, form=form)
+        return render_template('admin/access_admin.html', results=results, form=form)
     return redirect(url_for('admin.access_admin'))
 
 
@@ -193,7 +200,7 @@ def report_dash():
     d_aware = timezone.localize(d)
 
     date = d_aware.strftime("%B %d, %Y %H:%M:%S")
-    results = User.query.filter_by(status='Active').all()
+    results = User.query.filter_by(status='Active').order_by(User.national_id)
     return render_template('admin/report_dash.html', results=results, date=date)
 
 
@@ -211,7 +218,7 @@ def report_pdf():
     d_aware = timezone.localize(d)
 
     date = d_aware.strftime("%B %d, %Y %H:%M:%S")
-    results = User.query.filter_by(status='Active').all()
+    results = User.query.filter_by(status='Active').order_by(User.national_id)
     return render_template('admin/report.html', results=results, date=date)
 
 
@@ -236,7 +243,7 @@ def send_report():
         d_aware = timezone.localize(d)
 
         date = d_aware.strftime("%B %d, %Y %H:%M:%S")
-        results = User.query.filter_by(status='Active').all()
+        results = User.query.filter_by(status='Active').order_by(User.national_id)
         pdf = create_pdf(render_template('admin/report.html', results=results, date=date))
         msg.attach("report.pdf", "application/pdf", pdf.getvalue())
         thr = Thread(target=send_async_email, args=[msg])
@@ -252,32 +259,65 @@ def send_async_email(msg):
         mail.send(msg)
 
 
-@admin.route('/stats', methods=['GET'])
-@login_required
-@admin_user
-def stats():
-    return render_template('admin/stats.html')
-
-
 def color(i):
     colors = ["#" + ''.join([random.choice('0123456789ABCDEF') for j in range(6)])
               for num in range(i)]
     return colors
 
 
-@admin.route('/charts', methods=['GET'])
+@admin.route('/stats', methods=['GET'])
 @login_required
 @admin_user
-def charts():
-    fruits = ['Apples', 'Pears', 'Nectarines', 'Plums', 'Grapes', 'Strawberries']
-    counts = [5, 3, 4, 2, 4, 6]
+def stats():
+    results = County.query.filter_by(id=County.id)
+    county = []
+    size = []
+    county_code = []
+    for result in results:
+        county.append(result.county_name)
+        size.append(result.size)
+        county_code.append(result.id)
 
-    source = ColumnDataSource(data=dict(fruits=fruits, counts=counts, color=color(len(fruits))))
+    source = ColumnDataSource(data=dict(county=county, size=size, county_code=county_code, color=color(len(county))))
 
-    plot = figure(x_range=fruits, y_range=(0, 9), plot_height=500, plot_width=900, title="Fruit Counts",
-                  toolbar_location=None, tools="hover")
+    plot = figure(x_range=county, y_range=(0, 80000), height=500, width=900, title="County Size",
+                  toolbar_location="right", tools="pan, wheel_zoom, box_zoom, save, reset, hover")
 
-    plot.vbar(x='fruits', top='counts', width=0.9, color='color', legend="fruits", source=source)
+    plot.add_tools(BoxSelectTool(dimensions="width"))
+
+    plot.vbar(x='county', top='size', width=0.9, color='color', source=source, legend='county_code')
+
+    plot.xgrid.grid_line_color = None
+    plot.legend.orientation = "vertical"
+    plot.legend.location = "top_left"
+
+    script, div = components(plot)
+
+    # Return the webpage
+    return render_template('admin/stats.html', div=div, script=script)
+
+
+@admin.route('/analysis', methods=['GET'])
+@login_required
+@admin_user
+def analysis():
+    results = County.query.filter_by(id=County.id)
+    county = []
+    size = []
+    county_code = []
+    for result in results:
+        county.append(result.county_name)
+        size.append(result.size)
+        county_code.append(result.id)
+
+    source = ColumnDataSource(data=dict(county=county, size=size, county_code=county_code, color=color(len(county))))
+
+    plot = figure(x_range=county, y_range=(0, 80000), height=500, width=900, title="County Size",
+                  toolbar_location="right", tools="pan, wheel_zoom, box_zoom, save, reset, hover")
+
+    plot.add_tools(BoxSelectTool(dimensions="width"))
+
+    plot.line(x='county', y='size', legend="county_code", source=source)
 
     plot.xgrid.grid_line_color = None
     plot.legend.orientation = "horizontal"
@@ -286,28 +326,69 @@ def charts():
     script, div = components(plot)
 
     # Return the webpage
-    return render_template("admin/charts.html", div=div, script=script)
+    return render_template('admin/analysis.html', div=div, script=script)
 
 
-@admin.route('/analysis', methods=['GET'])
-@login_required
-@admin_user
-def analysis():
-    pass
+@socketio.on('message')
+def handleMessage(msg):
+    send(msg, broadcast=True)
 
 
 @admin.route('/notifications', methods=['GET'])
 @login_required
 @admin_user
 def notifications():
-    pass
+    return render_template('admin/chats.html')
 
 
 @admin.route('/settings', methods=['GET'])
 @login_required
 @admin_user
 def settings():
-    pass
+    form = SearchForm()
+    if form.validate_on_submit():
+        email = request.form['email']
+        results = User.query.filter_by(email=email).order_by(User.national_id)
+        if not results:
+            flash('Admin not Found', category='danger')
+            return render_template('admin/settings.html', results=False, form=form)
+        flash('Found!', category='success')
+        return render_template('admin/settings.html', search=results, form=form)
+    results = User.query.order_by(User.national_id)
+    return render_template('admin/settings.html', results=results, form=form)
+
+
+@admin.route('/activate/<int:national_id>', methods=['GET'])
+@login_required
+@admin_user
+def activate(national_id):
+    user = User.query.get(national_id)
+    user.status = "Active"
+    db.session.add(user)
+    db.session.commit()
+    return redirect(url_for('admin.settings'))
+
+
+@admin.route('/suspend/<int:national_id>', methods=['GET'])
+@login_required
+@admin_user
+def suspend(national_id):
+    user = User.query.get(national_id)
+    user.status = "Suspended"
+    db.session.add(user)
+    db.session.commit()
+    return redirect(url_for('admin.settings'))
+
+
+@admin.route('/deactivate/<int:national_id>', methods=['GET'])
+@login_required
+@admin_user
+def deactivate(national_id):
+    user = User.query.get(national_id)
+    user.status = "Inactive"
+    db.session.add(user)
+    db.session.commit()
+    return redirect(url_for('admin.settings'))
 
 
 @admin.route('/logout', methods=['GET'])

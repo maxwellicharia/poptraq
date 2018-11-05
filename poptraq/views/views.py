@@ -10,17 +10,24 @@ from werkzeug.security import check_password_hash
 from poptraq import app, db
 from poptraq.decorators import anonymous
 from poptraq.form import LoginForm
-from poptraq.models import User
+from poptraq.models import User, County
 
 
 @app.route('/', methods=['GET'])
 def index():
-    return render_template('app/index.html')
+    results = County.query.order_by(County.id)
+    return render_template('app/index.html', results=results)
+
+
+@app.route('/sources', methods=['GET'])
+def sources():
+    return render_template('app/sources.html')
 
 
 @app.route('/login', methods=['GET', 'POST'])
 @anonymous
 def login():
+    # Manage account login with active status
     form = LoginForm(request.form)
     if form.validate_on_submit():
         user = User.query.filter_by(national_id=form.national_id.data, email=form.email.data).first()

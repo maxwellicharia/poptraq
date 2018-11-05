@@ -9,8 +9,8 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from poptraq import app, db
 from poptraq.decorators import confirmed, unconfirmed_user, anonymous, normal_user
 from poptraq.email import send_email
-from poptraq.form import RegistrationForm, EmailForm, PasswordForm
-from poptraq.models import User
+from poptraq.form import RegistrationForm, EmailForm, PasswordForm, DetailsForm
+from poptraq.models import User, Details
 from poptraq.token import generate_confirmation_token, confirm_token
 
 user = Blueprint('user', __name__, url_prefix='/user')
@@ -35,6 +35,7 @@ def account():
 @user.route('/register_user', methods=['GET', 'POST'])
 @anonymous
 def register():
+    # Manage accounts using Activity Status
     form = RegistrationForm()
     if form.validate_on_submit():
         new_user = User(request.form['national_id'],
@@ -164,7 +165,17 @@ def password_reset():
 @normal_user
 @confirmed
 def details():
-    pass
+    form = DetailsForm()
+    if form.validate_on_submit():
+        detail = Details(request.form['passport_photo'],
+                         request.form['age'],
+                         request.form['gender'],
+                         request.form['marital_status'],
+                         request.form['specifics'])
+        db.session.add(detail)
+        db.session.commit()
+        return redirect(url_for('user.account'))
+    return render_template('user/details.html', form=form)
 
 
 @user.route('/notifications', methods=['GET'])

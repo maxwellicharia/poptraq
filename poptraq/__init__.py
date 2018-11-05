@@ -6,6 +6,7 @@ from flask_bootstrap import Bootstrap
 from flask_debug import Debug
 from flask_mail import Mail
 from flask_recaptcha import ReCaptcha
+from flask_socketio import SocketIO
 import sentry_sdk
 from sentry_sdk.integrations.flask import FlaskIntegration
 
@@ -37,9 +38,9 @@ app.config.update(
 
     SECRET_KEY="$poptraq#",
     SECURITY_PASSWORD_SALT="@tre3potraq#",
-    # SQLALCHEMY_DATABASE_URI="postgres://unjltzspnbvjzb:e511c61dacd775cffc0857dde01511955532ef8b08c88c897b0d21b874f94848"
-    #                         "@ec2-54-221-251-195.compute-1.amazonaws.com:5432/d1lqqk8qoqodln",
-    SQLALCHEMY_DATABASE_URI="postgresql://postgres:postgres@localhost:5432/potraq",
+    SQLALCHEMY_DATABASE_URI="postgres://unjltzspnbvjzb:e511c61dacd775cffc0857dde01511955532ef8b08c88c897b0d21b874f94848"
+                            "@ec2-54-221-251-195.compute-1.amazonaws.com:5432/d1lqqk8qoqodln",
+    #SQLALCHEMY_DATABASE_URI="postgresql://postgres:postgres@localhost:5432/potraq",
     SQLALCHEMY_TRACK_MODIFICATIONS=False,
     BCRYPT_LOG_ROUNDS=13,
     WTF_CSRF_ENABLED=True
@@ -67,6 +68,9 @@ Debug(app)
 mail = Mail(app)
 
 db = SQLAlchemy(app)
+
+socketio = SocketIO(app)
+
 
 from poptraq.models import User, County
 from poptraq import views

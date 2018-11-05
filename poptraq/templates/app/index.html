@@ -52,31 +52,33 @@
     </center>
 </div>
 <br>
-<div id="results">
-    <table class="table table-hover table-striped table-responsive">
+{% if results %}
+<div id="results" style="margin-left: 2cm; margin-right: 2cm; margin-bottom: 2cm;">
+    <table class="table table-hover table-striped table-responsive"->
         <thead>
         <tr>
             <th>County ID</th>
             <th>County</th>
-            <th>Sub-Counties</th>
             <th>Sectors</th>
             <th>Population</th>
-            <th>Budget</th>
-            <th>Size</th>
+            <th>Current Budget</th>
+            <th>ProposedBudget</th>
+            <th>Area (Km<sup>2</sup>)</th>
         </tr>
         </thead>
 
         {% for result in results%}
         <tr>
-            <td>{{ result[0] }}</td>
-            <td>{{ result[1] }}</td>
-            <td>{{ result[2] }}</td>
-            <td>{{ result[3] }}</td>
-            <td>{{ result[4] }}</td>
-            <td>{{ result[5] }}</td>
-            <td>{{ result[6] }}</td>
+            <td>{{ result.id }}</td>
+            <td>{{ result.county_name }}</td>
+            <td>{{ result.sectors }}</td>
+            <td>{{ result.population }}</td>
+            <td>{{ result.current_budget }}</td>
+            <td>{{ result.proposed_budget }}</td>
+            <td>{{ result.size }}</td>
         </tr>
         {% endfor %}
     </table>
 </div>
+{% endif %}
 {% endblock %}

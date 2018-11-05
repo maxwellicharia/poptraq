@@ -40,7 +40,7 @@
 </div>
 <br>
 {% if results %}
-<div id="results">
+<div id="results" style="margin-left: 2cm; margin-right: 2cm; margin-bottom: 2cm;">
     <table class="table table-hover table-striped table-responsive">
         <thead>
         <tr>
@@ -74,42 +74,6 @@
     </table>
 </div>
 {% else %}
-<center><h3 style="color: red;">No Data to display</h3></center>
-{% endif %}
-
-{% if search %}
-<div id="search">
-    <table class="table table-hover table-striped table-responsive">
-        <thead>
-        <tr>
-            <th>National ID</th>
-            <th>Email Address</th>
-            <th>User Privileges</th>
-            <td style="color:green;">Grant User Rights</td>
-            <td style="color:red;">Revoke User Rights</td>
-            <th>Admin Privileges</th>
-            <td style="color:blue;">Grant Admin Rights</td>
-            <td style="color:orange;">Revoke Admin Rights</td>
-        </tr>
-        </thead>
-
-        {% for result in search%}
-        <tr>
-            <td>{{ result.national_id }}</td>
-            <td>{{ result.email }}</td>
-            <td>{{ result.user }}</td>
-            <td><a href="{{ url_for('admin.grant_user_rights', national_id=result.national_id) }}" type="button"
-                   class="btn btn-success">Grant User Rights</a></td>
-            <td><a href="{{ url_for('admin.revoke_user_rights', national_id=result.national_id) }}" type="button"
-                   class="btn btn-danger">Revoke User Rights</a></td>
-            <td>{{ result.admin }}</td>
-            <td><a href="{{ url_for('admin.grant_admin_rights', national_id=result.national_id) }}" type="button"
-                   class="btn btn-primary">Grant Admin Rights</a></td>
-            <td><a href="{{ url_for('admin.revoke_admin_rights', national_id=result.national_id) }}" type="button"
-                   class="btn btn-warning">Revoke Admin Rights</a></td>
-        </tr>
-        {% endfor %}
-    </table>
-</div>
+<center><h3 style="color: red;">Not found</h3></center>
 {% endif %}
 {% endblock %}

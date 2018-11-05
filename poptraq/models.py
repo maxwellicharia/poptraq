@@ -58,26 +58,36 @@ class County(db.Model):
 
     __tablename__ = 'county'
 
-    county_code = db.Column(db.Integer, nullable=False, primary_key=True)
-    county_name = db.Column(db.String, nullable=False)
-    sub_county = db.Column(db.Integer, nullable=False)
-    sectors = db.Column(db.Integer, nullable=False)
-    population = db.Column(db.Float, nullable=False)
-    budget = db.Column(db.Float, nullable=False)
-    # Allocated budget field, to add
+    id = db.Column(db.Integer, nullable=False, primary_key=True)
+    county_name = db.Column(db.String, nullable=False, unique=True)
+    sectors = db.Column(db.Integer, nullable=True)
+    population = db.Column(db.Integer, nullable=True)
+    current_budget = db.Column(db.Float, nullable=True)
+    proposed_budget = db.Column(db.Float, nullable=True)
     size = db.Column(db.Float, nullable=False)
 
-    def __init__(self, county_code, county_name, sub_county, sectors, population, budget, size):
-        self.county_code = county_code
+    def __init__(self, county_name, size):
         self.county_name = county_name
-        self.sub_county = sub_county
-        self.sectors = sectors
-        self.population = population
-        self.budget = budget
         self.size = size
-
-    def get_id(self):
-        return self.county_code
 
     def __repr__(self):
         return '<county_id {}>'.format(self.county_id)
+
+
+class Details(db.Model):
+    """User Details"""
+
+    __tablename__ = 'details'
+    national_id = db.Column(db.Integer, nullable=False, primary_key=True)
+    photo = db.Column(db.String, nullable=False)
+    age = db.Column(db.Integer, nullable=False)
+    gender = db.Column(db.String, nullable=False)
+    status = db.Column(db.String, nullable=False)
+    specifics = db.Column(db.Text, nullable=False)
+
+    def __init__(self, photo, age, gender, status, specifics):
+        self.photo = photo
+        self.age = age
+        self.gender = gender
+        self.status = status
+        self.specifics = specifics

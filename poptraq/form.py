@@ -1,16 +1,21 @@
 from flask_wtf import FlaskForm, RecaptchaField
-from wtforms import StringField, IntegerField, PasswordField, FloatField, BooleanField, SelectField
+from wtforms import StringField, IntegerField, PasswordField, FloatField, BooleanField, SelectField, TextAreaField
 from wtforms.fields.html5 import DateField, EmailField
 from wtforms.validators import DataRequired, Email, EqualTo, Length, ValidationError
+from flask_wtf.file import FileField, FileAllowed, FileRequired
+from flask_uploads import UploadSet, IMAGES
 from datetime import datetime
 from datetime import date
 
 from poptraq.models import User
 
+images = UploadSet('images', IMAGES)
+
 
 def calculate_age(dt):
     birth = datetime.strptime(dt, '%Y-%m-%d')
     today = date.today()
+    print(float(today.year - birth.year - ((today.month, today.day) < (birth.month, birth.day))), )
     return today.year - birth.year - ((today.month, today.day) < (birth.month, birth.day))
 
 
@@ -94,7 +99,7 @@ class AdminForm(FlaskForm):
     pass
 
 
-class County(FlaskForm):
+class CountyForm(FlaskForm):
     """County Template for data display"""
 
     county_name = SelectField('County', [DataRequired(message="Kindly select home county")],
@@ -115,10 +120,6 @@ class County(FlaskForm):
                                        ('Siaya', 'Siaya'), ('Kisumu', 'Kisumu'), ('Homa Bay', 'Homa Bay'),
                                        ('Migori', 'Migori'), ('Kisii', 'Kisii'), ('Nyamira', 'Nyamira'),
                                        ('Nairobi', 'Nairobi')])
-    sub_counties = IntegerField("No. of Sub-counties", [DataRequired(message="Required field")])
-    sectors = IntegerField("No. of sectors", [DataRequired(message="Input County Government Sectors")])
-    population = FloatField("Population", [DataRequired(message="Input estimated calculated population")])
-    budget = FloatField("Budget (Ksh)", [DataRequired(message="Input allocated budget")])
     size = FloatField("County Size", [DataRequired(message="Input county size")])
 
 
@@ -139,3 +140,17 @@ class PasswordForm(FlaskForm):
 
 class SearchForm(FlaskForm):
     email = EmailField()
+
+
+class DetailsForm(FlaskForm):
+    passport_photo = FileField("Passport Photo", validators=[
+        FileRequired(),
+        FileAllowed(images, 'Images only!')])
+    age = IntegerField()
+    gender = SelectField('Gender', [DataRequired(message="Kindly select your gender")],
+                         choices=[('Female', 'Female'), ('Male', 'Male')])
+    marital_status = SelectField('Marital Status', [DataRequired(message="Kindly select your status")],
+                                 choices=[('Single', 'Single'), ('Married', 'Married'), ('Divorced', 'Divorced'),
+                                          ('Separated', 'Separated')])
+    specifics = TextAreaField('Specify your status, N/A if individual',
+                              [DataRequired(message="Update details regarding your status")])
