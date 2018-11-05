@@ -57,39 +57,11 @@ successfully install git on your machine
 
 2. PGAdmin III - TO manage migrations and the database.
 
-
-3. 
-
 - Follow this [tutorial](https://www.pgadmin.org/download/) that will aid in installing PGAdmin III
 
 
 Various database variables will need to be changed in order to suit your 
 Development Environment.
-
-
-Download the connector here for MySQL below:
-
-
-[Go to site](https://dev.mysql.com/downloads/connector/j/)
-
-
-Once downloaded, add it to your libraries under your project. This is 
-dependent on the IDE being used.
-
-
-3. JFOenix Jar - Both versions Java 8 or Java 9.
-
-
-[Go to site](https://github.com/jfoenixadmin/JFoenix)
-
-
-Click version 8 or 9 depending on your java version 
-and it will download immediately.
-
-
-Once the respective jars have been dowloaded, add them to your libraries 
-depending on the IDE you are using.
-
 
 ### Installing
 
@@ -105,37 +77,40 @@ Prior knowledge of git, installation and setup is assumed.
 
 
 ```
-git clone https://github.com/Maxwell-Icharia/Rental-Management-System/
+git clone https://github.com/Maxwell-Icharia/poptraq
 ```
 
+2. Install pip in order to install various requirements needed by the application.
 
-2. While using Netbeans IDE, click open project and work around into the 
-file that has been cloned.
 
+```sudo apt-get install virtualenv```
+
+3. Use pip to install a virtual environment for running the application.
+
+```sudo apt-get install python3-pip```
+
+4. Create a new virtual environment that will be used to run the application without tampering with your system's various installed modules.
+
+``` virtualenv venv```
+
+5. Activate your virtual environment.
+
+```. venv/bin/activate```
+
+6 Install all the requirements needed to run the application found in the requirements.txt file.
+
+```pip install -r requirements.txt```
+
+7. Run the application.
+
+```python run.py```
 
 ## Built With
 
-
-* [JavaFX](https://docs.oracle.com/javafx/2/overview/jfxpub-overview.htm) - GUI Builder
-* [JFoenix](https://github.com/jfoenixadmin/JFoenix) - Interface Design
-* [MySQL](https://www.mysql.com/) - Database
-* JBCrypt - Hashing API
+* Python Flask
 
 
 ## Authors
 
-
-- Wendy Karume - [Github](https://github.com/wendykarume)
 - Maxwell Icharia - [Github](https://github.com/Maxwell-Icharia)
-
-
-See also the list of [contributors](https://github.com/Maxwell-Icharia/Rental-Management-System/graphs/contributors) who participated in this project.
-
-
-## License
-
-
-This project is licensed under the GNU-GPL Version 3 - see the 
-[LICENSE.md](LICENSE) file for details
-
 
