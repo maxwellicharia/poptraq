@@ -60,7 +60,7 @@ python-editor==1.0.3
 python-engineio==2.3.2
 python-socketio==2.0.0
 pytz==2018.5
-PyYAML==3.13
+PyYAML==5.4
 raven==6.9.0
 reportlab==3.5.9
 requests==2.19.1
