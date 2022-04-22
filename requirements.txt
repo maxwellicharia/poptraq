@@ -52,7 +52,7 @@ psycopg2==2.7.5
 psycopg2-binary==2.7.5
 pycparser==2.19
 pyparsing==2.2.2
-PyPDF2==1.26.0
+PyPDF2==1.27.5
 Pyphen==0.9.5
 python-dateutil==2.7.3
 python-dotenv==0.9.1
